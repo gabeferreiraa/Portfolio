@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 
 
@@ -115,12 +116,8 @@ export default function CaseStudyPage() {
             {/* Hero image placeholder */}
             <div className="mx-auto mt-12 max-w-screen-xl px-6 md:px-12 lg:px-24">
               <figure>
-                <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-neutral-dark bg-neutral-dark/30">
-                  {/* Replace src with your hero image */}
-                  {/* <Image src="/case-study/hero.png" alt="Final portfolio design shown across desktop and mobile viewports" fill className="object-cover" priority /> */}
-                  <div className="flex h-full items-center justify-center text-neutral-mid">
-                    <p className="text-sm">Hero image — replace with final project screenshot</p>
-                  </div>
+                <div className="relative w-full overflow-hidden rounded-lg border border-neutral-dark bg-neutral-dark/30">
+                  <Image src="/Capture-2026-03-20-124124.png" alt="Final portfolio design shown across desktop and mobile viewports" width={2967} height={1585} className="h-auto w-full" priority />
                 </div>
                 <figcaption className="mt-3 text-center text-xs text-foreground">
                   The final portfolio design across desktop and mobile breakpoints.
@@ -236,11 +233,8 @@ export default function CaseStudyPage() {
 
                   {/* Color palette image placeholder */}
                   <figure className="my-8">
-                    <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-neutral-dark bg-neutral-dark/30">
-                      {/* <Image src="/case-study/colors.png" alt="Color palette showing dark and light mode pairings with contrast ratios" fill className="object-cover" /> */}
-                      <div className="flex h-full items-center justify-center text-neutral-mid">
-                        <p className="text-sm">Color system image — replace with palette screenshot</p>
-                      </div>
+                    <div className="relative w-full overflow-hidden rounded-lg border border-neutral-dark bg-neutral-dark/30">
+                      <Image src="/casestudy-colors.png" alt="Color palette showing dark and light mode pairings with contrast ratios" width={2984} height={1440} className="h-auto w-full" />
                     </div>
                     <figcaption className="mt-3 text-center text-xs text-foreground">
                       The dual-mode color system with contrast ratios annotated for each pairing.
@@ -285,7 +279,7 @@ export default function CaseStudyPage() {
                   {/* Additional image placeholder */}
                   <figure className="my-8">
                     <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-neutral-dark bg-neutral-dark/30">
-                      {/* <Image src="/case-study/accessibility-tree.png" alt="Chrome DevTools accessibility tree showing fully labeled landmarks" fill className="object-cover" /> */}
+                      <Image src="/casestudy-dom.png" alt="Chrome DevTools accessibility tree showing fully labeled landmarks" fill className="object-cover" />
                       <div className="flex h-full items-center justify-center text-neutral-mid">
                         <p className="text-sm">Additional image — replace with accessibility tree or wireframe screenshot</p>
                       </div>

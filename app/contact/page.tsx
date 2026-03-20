@@ -331,7 +331,7 @@ export default function ContactPage() {
                   className="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24"
                 >
                   {/* Section header (sticky on mobile/tablet) */}
-                  <header className="sticky top-0 z-20 -mx-6 mb-8 w-screen bg-background/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:bg-transparent">
+                  <header aria-label="Contact Me Section" className="sticky top-0 z-20 -mx-6 mb-8 w-screen bg-background/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:bg-transparent">
                     <h2
                       id="contact-heading"
                       className="text-sm font-bold uppercase tracking-widest text-foreground lg:text-2xl lg:font-bold lg:tracking-tight lg:normal-case"
@@ -490,6 +490,7 @@ export default function ContactPage() {
                         <label
                           htmlFor="email"
                           className="mb-2 block text-xs font-bold uppercase tracking-widest text-foreground"
+                          aria-label="Email Address Input"
                         >
                           Email Address{" "}
                           <span className="text-red-400" aria-hidden="true">*</span>
@@ -533,6 +534,7 @@ export default function ContactPage() {
                         <label
                           htmlFor="message"
                           className="mb-2 block text-xs font-bold uppercase tracking-widest text-foreground"
+                          aria-label="Message Input"
                         >
                           Message{" "}
                           <span className="text-red-400" aria-hidden="true">*</span>
