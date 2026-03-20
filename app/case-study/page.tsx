@@ -89,12 +89,12 @@ export default function CaseStudyPage() {
                 </h1>
                 <p className="mt-4 text-lg leading-relaxed text-foreground">
                   A personal portfolio built from scratch with accessibility as the primary
-                  design constraint, targeting WCAG 2.2 AAA compliance across every interaction.
+                  design constraint.
                 </p>
 
                 <ul className="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-sm text-foreground" role="list" aria-label="Project details">
                   <li aria-label="Role"><span className="font-semibold">Role:</span> Designer &amp; Developer</li>
-                  <li aria-label="Timeline"><span className="font-semibold">Timeline:</span> 3 Weeks</li>
+                  <li aria-label="Timeline"><span className="font-semibold">Timeline:</span> 10 Weeks</li>
                   <li aria-label="Type"><span className="font-semibold">Type:</span> Solo Project</li>
                   <li aria-label="Year"><span className="font-semibold">Year:</span> 2026</li>
                 </ul>
@@ -120,7 +120,7 @@ export default function CaseStudyPage() {
                   <Image src="/Capture-2026-03-20-124124.png" alt="Final portfolio design shown across desktop and mobile viewports" width={2967} height={1585} className="h-auto w-full" priority />
                 </div>
                 <figcaption className="mt-3 text-center text-xs text-foreground">
-                  The final portfolio design across desktop and mobile breakpoints.
+                  The final portfolio design.
                 </figcaption>
               </figure>
             </div>
@@ -148,16 +148,15 @@ export default function CaseStudyPage() {
                     This portfolio was designed and developed as part of a college web accessibility
                     course with one clear objective: prove that AAA-level accessibility and
                     polished visual design are not mutually exclusive. Every color pairing meets
-                    WCAG 2.2 AAA contrast ratios (7:1 for body text, 4.5:1 for large text), every
+                    WCAG 2.2 AAA contrast ratios, every
                     interactive element is keyboard-navigable, and the full DOM tree is described
                     for assistive technology.
                   </p>
                   <p>
-                    The result is a two-column portfolio featuring an about page, a dedicated
+                    The solution is a two-column portfolio featuring an about page, a dedicated
                     experience timeline, and a fully validated contact form — all wrapped in a
                     dark/light theme toggle that maintains AAA compliance in both modes. The site
-                    scores 100 on Lighthouse accessibility and ships zero accessibility violations
-                    in axe-core automated testing.
+                    scores 100 on Lighthouse accessibility.
                   </p>
                 </div>
               </section>
@@ -174,18 +173,16 @@ export default function CaseStudyPage() {
                   <h3 className="text-lg font-semibold">Background</h3>
                   <p>
                     The project was assigned as the capstone for a web accessibility course. The
-                    brief required a multi-page personal portfolio that demonstrates mastery of
+                    brief required a multi-page live site that demonstrates mastery of
                     semantic HTML, ARIA attributes, color contrast, keyboard navigation, and
-                    responsive design — all evaluated against WCAG 2.2 AAA success criteria.
+                    responsive design. All evaluated against WCAG 2.2 AAA success criteria.
                   </p>
 
                   <h3 className="mt-8 text-lg font-semibold">The Problem</h3>
                   <p>
-                    Most portfolio templates treat accessibility as an afterthought — layered on
-                    after visual design is locked. This leads to bolted-on aria attributes,
-                    contrast failures hidden behind opacity tricks, and decorative elements that
-                    pollute the accessibility tree. The challenge was to invert that workflow:
-                    start from the accessibility tree and build the visual design outward.
+                    Most portfolios worry about accessibility when its too late, after they&apos;ve built the design. This makes the process
+                    fail several areas when validating for WCAG 2.2 AAA standards. The challenge was inverting the previous workflow so 
+                    that we start with accessibility and build up from there
                   </p>
 
                   <h3 className="mt-8 text-lg font-semibold">Goals &amp; Objectives</h3>
