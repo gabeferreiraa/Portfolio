@@ -3,14 +3,14 @@
 
 export const site = {
   name: "Gabriel Ferreira",
-  role: "UX/UI Engineer",
+  role: "UI/UX Developer",
   location: "Philadelphia, PA",
   // Production origin, no trailing slash. Used for canonical, og:url, JSON-LD.
   // robots.txt and sitemap.xml in /public hardcode this too — update them together.
   url: "https://gabrielferreira.org",
-  title: "Gabriel Ferreira — UX/UI Engineer",
+  title: "Gabriel Ferreira — UI/UX Developer",
   description:
-    "Gabriel Ferreira is a UX/UI engineer in Philadelphia and the founder of Impossible Solutions, a software studio building websites and mobile apps.",
+    "Gabriel Ferreira is a UI/UX developer in Philadelphia and the founder of Impossible Solutions, a software studio building websites and mobile apps.",
   email: "gferreira0404@gmail.com",
   // Replace the file in /public/pdf (or change this path) to update the resume.
   resume: "/pdf/24_25_resume.pdf",
@@ -37,16 +37,16 @@ export type Role = {
 // Most relevant first.
 export const experience: Role[] = [
   {
+    role: "Junior Developer · Current",
+    org: "Proconex",
+    href: "https://www.proconexdirect.com",
+  },
+  {
     role: "Founder",
     org: "Impossible Solutions",
     href: "https://impossiblesolutions.studio",
     description:
       "A software studio founded at Drexel and rooted in Philadelphia. We design, build and ship websites, mobile apps and full-stack platforms for founders and product teams.",
-  },
-  {
-    role: "Software Developer (part-time)",
-    org: "Proconex",
-    href: "https://www.proconexdirect.com",
   },
 ];
 
@@ -66,15 +66,6 @@ export const projects: Project[] = [
       "An iOS meditation app made with five-time Grammy-winning artist Jeff Bhasker, pairing guided sessions and Dolby Atmos audio with real-time moon phase tracking.",
     meta: "iOS app · React Native, Expo, Firebase · 2025–2026",
     href: "https://moonrise-web.vercel.app/",
-  },
-  {
-    title: "Agent 7",
-    description:
-      "A WWII documentary platform bringing untold stories to life through immersive multimedia.",
-    // TODO: add year
-    meta: "Website · Next.js, Mux, Supabase",
-    // TODO: agent7film.com returns Vercel DEPLOYMENT_NOT_FOUND (checked 2026-10-09) — restore the link once it's live again
-    // href: "https://agent7film.com/",
   },
   {
     title: "Mix with Taner",
@@ -98,8 +89,9 @@ export const projects: Project[] = [
   },
   {
     title: "Out&Abt",
-    // TODO: replace with a one-sentence description of what the app does
-    description: "A social mobile app, designed in Figma and built as my junior-year project.",
+    description:
+      "A mobile app for finding restaurants, desserts, activities and spots worth going to near you. Designed in Figma and built as my junior-year project.",
     meta: "Mobile app · React Native, Expo · 2025–2026",
+    href: "https://outandabt-web.vercel.app/",
   },
 ];
