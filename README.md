@@ -43,7 +43,7 @@ Set these in Vercel → Project → Settings → Environment Variables:
 |---|---|
 | `RESEND_API_KEY` | Required. From resend.com/api-keys |
 | `CONTACT_TO_EMAIL` | Defaults to gferreira0404@gmail.com |
-| `CONTACT_FROM_EMAIL` | Defaults to `onboarding@resend.dev`, which only delivers to your Resend account email. Verify `gabrielferreira.org` in Resend and use e.g. `Portfolio <hello@gabrielferreira.org>`. |
+| `CONTACT_FROM_EMAIL` | `"Gabriel Ferreira <hello@gabrielferreira.org>"` — must be on a Resend-verified domain. Falls back to `onboarding@resend.dev`, which only delivers to your Resend account email. |
 
 Without a key the form shows a friendly "email me directly" message.
 
