@@ -26,7 +26,9 @@ export const intro: (string | Link)[][] = [
   [
     "Right now I'm a junior developer at ",
     { label: "Linque", href: "https://www.linque.com/" },
-    " and the founder of Impossible Solutions, a software studio in Philadelphia.",
+    " and the founder of ",
+    { label: "Impossible Solutions", href: "https://impossiblesolutions.studio" },
+    ", a software studio in Philadelphia.",
   ],
 ];
 
@@ -52,13 +54,13 @@ export const experience: Role[] = [
     org: "Linque",
     href: "https://www.linque.com/",
     description:
-      "An industrial intelligence company connecting IT, OT and AI systems. Formerly Proconex — I stayed on after my co-op when the company became Linque.",
+      "An industrial intelligence company connecting IT, OT and AI systems.",
   },
   {
     role: "Co-op · 2025",
     org: "Proconex",
     href: "https://www.proconexdirect.com",
-    description: "A six-month co-op developing software, before Proconex became Linque.",
+    description: "A six-month co-op building software for the industrial automation and process control industry.",
   },
   {
     role: "Founder",
