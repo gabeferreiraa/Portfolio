@@ -1,108 +1,79 @@
-// Single source of truth for site copy and links.
+// Single source of truth for site copy, links and metadata.
+// Edit this file to update the site.
 
 export const site = {
   name: "Gabriel Ferreira",
   role: "UX/UI Engineer",
-  tagline: "I bring your idea to life, and opportunity keeps you growing beyond delivery",
+  location: "Philadelphia, PA",
+  // Production origin, no trailing slash. Used for canonical, og:url, JSON-LD.
+  // robots.txt and sitemap.xml in /public hardcode this too — update them together.
+  url: "https://gabrielferreira.org",
+  title: "Gabriel Ferreira — UX/UI Engineer",
   description:
-    "Gabriel Ferreira is a UX/UI engineer in Philadelphia building accessible, meticulous web and mobile applications.",
+    "Gabriel Ferreira is a UX/UI engineer in Philadelphia who designs and builds accessible web and mobile applications.",
   email: "gferreira0404@gmail.com",
-  // TODO: swap in the current resume PDF (keep the same path or update here)
+  // Replace the file in /public/pdf (or change this path) to update the resume.
   resume: "/pdf/24_25_resume.pdf",
 };
 
-export const socials = [
+export const intro = [
+  "I design and build web and mobile applications, and I care most about the parts people actually feel — accessibility, clear hierarchy, and details that hold up under a close look.",
+  "I'd rather talk an idea through on a call than trade messages, and I think the experience is the most important thing anyone takes away from my work.",
+];
+
+export type Link = { label: string; href: string };
+
+export const profiles: Link[] = [
   { label: "GitHub", href: "https://github.com/gabeferreiraa" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/gabriel-ferreira-544b95251/" },
 ];
 
-export const nav = [
-  { href: "#about", label: "About" },
-  { href: "#work", label: "Projects" },
-  { href: "#contact", label: "Contact" },
-];
-
-export const employer = {
-  name: "Proconex",
-  href: "https://www.proconexdirect.com",
-};
-
-export const about = {
-  intro:
-    "I'm a UI/UX engineer who is driven to deliver accessible, unique, and meticulous applications. I specialize in web-accessibility, design, development and optimization of applications.",
-  // Rendered with a link to `employer`
-  current: "Currently I'm based in Philadelphia, PA where I work as a part-time Software Developer @",
-  rest: [
-    "Throughout my time as a developer I've been able to develop software across different applications, whether it was trouble shooting or starting from zero, there was always an opportunity for success.",
-    "If you have any questions please reach out, and I'll respond as soon as I'm available!",
-  ],
-};
-
 export type Project = {
   title: string;
-  type: string;
-  tools: string[];
-  year: string;
   description: string;
-  image?: string;
-  imageAlt?: string;
-  href: string;
+  meta: string;
+  // Leave undefined until there's a public URL — the title renders as plain text.
+  href?: string;
 };
 
-// TODO: replace "#" hrefs with real project links
+// Ordered by significance.
 export const projects: Project[] = [
   {
     title: "Moonrise Meditation",
-    type: "Mobile App, Creative",
-    tools: ["TypeScript", "React Native", "Expo Go", "Dolby Atmos Audio"],
-    year: "2025",
     description:
-      "Curated a mobile app with 5 time grammy winning artist Jeff Bhasker to create a meditative experience",
-    href: "#",
-  },
-  {
-    title: "Out&Abt",
-    type: "Mobile App, Social",
-    tools: ["React Native", "Expo Go", "Figma"],
-    year: "2025–2026",
-    description: "Junior project",
-    image: "/images/outnabt-cover.png",
-    imageAlt: "Out&Abt app cover",
-    href: "#",
+      "A meditation app made with five-time Grammy-winning artist Jeff Bhasker, built around immersive Dolby Atmos audio.",
+    meta: "Mobile app · React Native, Expo · 2025",
   },
   {
     title: "Impossible Solutions",
-    type: "Website, Business",
-    tools: ["Next.js", "React", "Tailwind"],
-    year: "2026",
-    description: "Custom website for a new tech startup",
-    href: "#",
+    description: "A custom website for a new tech startup.",
+    meta: "Website · Next.js, React, Tailwind · 2026",
+  },
+  {
+    title: "Out&Abt",
+    // TODO: replace with a one-sentence description of what the app does
+    description: "A social mobile app, designed in Figma and built as my junior-year project.",
+    meta: "Mobile app · React Native, Expo · 2025–2026",
   },
   {
     title: "Drexel EGS",
-    type: "Website, Academic",
-    tools: ["WordPress", "Elementor"],
-    year: "2024",
-    description:
-      "Custom wordpress website for Drexel University's Entrepreneurial Gaming Studio",
-    image: "/images/egs-hero.png",
-    imageAlt: "Drexel EGS website hero",
-    href: "#",
+    description: "A custom WordPress site for Drexel University's Entrepreneurial Gaming Studio.",
+    meta: "Website · WordPress, Elementor · 2024",
   },
 ];
 
-export const howIWork = {
-  paragraphs: [
-    "I like building interfaces that feel quiet and intentional — clean hierarchy, smooth motion, and just enough personality to be memorable.",
-    "The experience should be the most important thing the user takes away from my work.",
-    "I'm very open and prefer to call clients instead of messaging, in the calls we can bounce ideas back and forth to find the perfect opportunity for you.",
-  ],
-  quote: "Opportunity keeps you growing beyond delivery.",
-  focus: ["Design systems", "Motion & micro-interactions", "Accessible UI", "Performance + polish"],
+// TODO: fill in to show the Professional Work section (hidden while name/url are empty).
+export const company = {
+  name: "",
+  url: "",
+  description: "",
+  relationship: "",
 };
 
-export const contact = {
-  heading: "Let's Build Something",
-  blurb:
-    "Feel free to reach out to me via email, linkedin, or github, or take a look at my resume below.",
+export const experience = {
+  current: {
+    role: "Software Developer (part-time)",
+    org: "Proconex",
+    href: "https://www.proconexdirect.com",
+  },
 };

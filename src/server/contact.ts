@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { Resend } from "resend";
-import { contactSchema } from "../contact-schema";
+import { parseContact } from "../contact-schema";
 
 export type ContactResult = { ok: true } | { ok: false; error: string };
 
@@ -8,7 +8,7 @@ const escapeHtml = (s: string) =>
   s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
 export const sendContactMessage = createServerFn({ method: "POST" })
-  .validator(contactSchema)
+  .validator(parseContact)
   .handler(async ({ data }): Promise<ContactResult> => {
     // Silently accept bot submissions so they don't retry
     if (data.company) return { ok: true };

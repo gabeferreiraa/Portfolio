@@ -9,7 +9,8 @@ export default defineConfig({
   resolve: { tsconfigPaths: true },
   plugins: [
     tailwindcss(),
-    tanstackStart(),
+    // Prerender "/" to static HTML; the contact server function still runs on Vercel
+    tanstackStart({ prerender: { enabled: true, crawlLinks: false } }),
     // Nitro builds the Vercel output (auto-detected on Vercel)
     nitro(),
     // React's plugin must come after Start's plugin

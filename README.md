@@ -1,8 +1,8 @@
-# Gabriel Ferreira — Portfolio
+# gabrielferreira.org
 
-Single-page portfolio built with [TanStack Start](https://tanstack.com/start), React 19, Tailwind CSS v4 and GSAP. Deployed on Vercel.
+Single-page personal site. [TanStack Start](https://tanstack.com/start) + React + Tailwind CSS v4, prerendered to static HTML and deployed on Vercel. The only server code is the contact form's email function.
 
-## Develop
+## Run locally
 
 ```bash
 pnpm install
@@ -10,31 +10,43 @@ cp .env.example .env   # add RESEND_API_KEY to test the contact form
 pnpm dev               # http://localhost:3000
 ```
 
-| Script | |
-|---|---|
-| `pnpm dev` | Dev server |
-| `pnpm build` | Production build (Nitro → `.output/`, Vercel output on Vercel) |
-| `pnpm start` | Run the production build locally |
-| `pnpm typecheck` | TypeScript check |
+## Build
 
-## Where things live
+```bash
+pnpm build       # prerenders / into .output/public, server function into .output/server
+pnpm start       # serve the production build locally
+pnpm typecheck
+```
 
-- `src/content.ts` — all copy, links and projects. Edit this to update the site.
-- `src/routes/index.tsx` — the page.
-- `src/routes/__root.tsx` — document shell, `<head>` metadata.
-- `src/components/ContactForm.tsx` — accessible contact form.
-- `src/server/contact.ts` — server function that emails form submissions via Resend.
-- `src/styles.css` — Tailwind theme tokens + global accessibility styles.
-- `public/` — images, resume PDF, favicon.
+## Editing content
 
-## Contact form / Vercel env vars
+Everything lives in **`src/content.ts`**: name, intro, links, projects, company, current role, metadata.
+
+- **Projects** — add `href` to make a title a link; without it the title renders as plain text. Order = display order.
+- **Professional Work** — fill in `company.name` and `company.url` (plus `description`, `relationship`). The section stays hidden until both are set.
+- **Resume** — replace `public/pdf/24_25_resume.pdf`, or add a new file and update `site.resume`.
+
+Styles and color tokens (light + automatic dark mode) are in `src/styles.css`. The page markup is `src/routes/index.tsx`; `<head>` metadata and JSON-LD are in `src/routes/__root.tsx`.
+
+## Domain / SEO
+
+The production origin is `site.url` in `src/content.ts` (canonical, `og:url`, JSON-LD). Two static files also contain it and must be updated with it:
+
+- `public/robots.txt` (sitemap line)
+- `public/sitemap.xml`
+
+## Contact form (Resend)
+
+Set these in Vercel → Project → Settings → Environment Variables:
 
 | Variable | Notes |
 |---|---|
 | `RESEND_API_KEY` | Required. From resend.com/api-keys |
 | `CONTACT_TO_EMAIL` | Defaults to gferreira0404@gmail.com |
-| `CONTACT_FROM_EMAIL` | Defaults to `onboarding@resend.dev` (only delivers to your Resend account email). Use an address on a verified domain for production. |
+| `CONTACT_FROM_EMAIL` | Defaults to `onboarding@resend.dev`, which only delivers to your Resend account email. Verify `gabrielferreira.org` in Resend and use e.g. `Portfolio <hello@gabrielferreira.org>`. |
 
-## Accessibility
+Without a key the form shows a friendly "email me directly" message.
 
-Skip link, landmark structure, visible `:focus-visible` rings, AA contrast tokens, labelled form fields with `aria-invalid`/`aria-describedby`, live-region status messages, and focus moved to the first invalid field / success message. Motion is disabled under `prefers-reduced-motion`; transparency and spotlight effects respect `prefers-reduced-transparency`, `prefers-contrast` and forced-colors mode.
+## Deploy
+
+Push the branch to the GitHub repo connected to Vercel. In Vercel, set **Framework Preset** to *Other* (it was Next.js), keep **Build Command** `pnpm build`, add the env vars above, and point `gabrielferreira.org` at the project under Domains. Nitro detects Vercel and emits the right output automatically.
