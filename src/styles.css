@@ -1,0 +1,207 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+
+  --color-primary-mid: #123a63;
+  --color-primary-dark: #0a1733;
+  --color-primary-light: #6a98f0;
+
+  --color-secondary-mid: #4b45a8;
+  --color-secondary-dark: #2e2a6b;
+  --color-secondary-light: #c7d0ff;
+
+  --color-tertiary-mid: #2ec4b6;
+  --color-tertiary-light: #6ee7dc;
+
+  --color-neutral-black: #0f1115;
+  --color-neutral-dark: #2a2e35;
+  --color-neutral-mid: #8b93a1; /* 5.6:1 on primary-dark (AA) */
+  --color-neutral-light: #b3b8c2;
+  --color-neutral-white: #ffffff;
+
+  --color-error: #f87171;
+
+  --color-background: var(--color-primary-dark);
+  --color-foreground: var(--color-neutral-white);
+  --color-focus: var(--color-tertiary-mid);
+}
+
+:root {
+  color-scheme: dark;
+  --spotlight-rgb: 46 196 182;
+  --measure: 65ch;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Readable line lengths */
+p,
+li {
+  max-width: var(--measure);
+}
+
+/* Links */
+a {
+  color: inherit;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  text-decoration-color: rgb(46 196 182 / 0.4);
+  transition: text-decoration-color 0.2s ease;
+}
+
+a:hover,
+a:focus-visible {
+  text-decoration-color: var(--color-tertiary-mid);
+}
+
+/* Focus: visible for keyboard users only */
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+/* Programmatic focus target (skip link destination) */
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(-100%);
+  z-index: 9999;
+  background: var(--color-tertiary-mid);
+  color: var(--color-neutral-black);
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 0 0 0.5rem 0;
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Spotlight (decorative) */
+.spotlight-bg {
+  background: radial-gradient(
+    650px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+    rgb(var(--spotlight-rgb) / 0.15),
+    transparent 80%
+  );
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+address {
+  font-style: normal;
+}
+
+::selection {
+  background-color: rgb(var(--spotlight-rgb) / 0.3);
+  color: var(--color-neutral-white);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-neutral-mid) var(--color-primary-dark);
+}
+
+/* ===== User preferences ===== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --color-tertiary-mid: #00ffff;
+    --color-neutral-light: #ffffff;
+    --color-neutral-mid: #d1d5db;
+  }
+  a {
+    text-decoration-color: var(--color-tertiary-mid);
+  }
+  :focus-visible {
+    outline-width: 4px;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .backdrop-blur {
+    backdrop-filter: none !important;
+    background: var(--color-primary-dark) !important;
+  }
+  .spotlight-bg {
+    background: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .spotlight-bg {
+    display: none;
+  }
+}
+
+@media print {
+  .spotlight-bg,
+  .skip-link,
+  form {
+    display: none !important;
+  }
+  body {
+    background: white;
+    color: black;
+  }
+  a {
+    text-decoration: underline;
+  }
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+  section {
+    break-inside: avoid;
+  }
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+}

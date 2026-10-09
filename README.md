@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Gabriel Ferreira — Portfolio
 
-## Getting Started
+Single-page portfolio built with [TanStack Start](https://tanstack.com/start), React 19, Tailwind CSS v4 and GSAP. Deployed on Vercel.
 
-First, run the development server:
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+cp .env.example .env   # add RESEND_API_KEY to test the contact form
+pnpm dev               # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Script | |
+|---|---|
+| `pnpm dev` | Dev server |
+| `pnpm build` | Production build (Nitro → `.output/`, Vercel output on Vercel) |
+| `pnpm start` | Run the production build locally |
+| `pnpm typecheck` | TypeScript check |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Where things live
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `src/content.ts` — all copy, links and projects. Edit this to update the site.
+- `src/routes/index.tsx` — the page.
+- `src/routes/__root.tsx` — document shell, `<head>` metadata.
+- `src/components/ContactForm.tsx` — accessible contact form.
+- `src/server/contact.ts` — server function that emails form submissions via Resend.
+- `src/styles.css` — Tailwind theme tokens + global accessibility styles.
+- `public/` — images, resume PDF, favicon.
 
-## Learn More
+## Contact form / Vercel env vars
 
-To learn more about Next.js, take a look at the following resources:
+| Variable | Notes |
+|---|---|
+| `RESEND_API_KEY` | Required. From resend.com/api-keys |
+| `CONTACT_TO_EMAIL` | Defaults to gferreira0404@gmail.com |
+| `CONTACT_FROM_EMAIL` | Defaults to `onboarding@resend.dev` (only delivers to your Resend account email). Use an address on a verified domain for production. |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Accessibility
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Skip link, landmark structure, visible `:focus-visible` rings, AA contrast tokens, labelled form fields with `aria-invalid`/`aria-describedby`, live-region status messages, and focus moved to the first invalid field / success message. Motion is disabled under `prefers-reduced-motion`; transparency and spotlight effects respect `prefers-reduced-transparency`, `prefers-contrast` and forced-colors mode.
