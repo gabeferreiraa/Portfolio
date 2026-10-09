@@ -19,9 +19,7 @@ function Home() {
       <div className="mx-auto max-w-[680px] px-5 pt-16 pb-12 sm:px-6 sm:pt-24 md:pt-32">
         <header>
           <h1 className="text-[1.75rem] leading-tight font-medium tracking-tight sm:text-[2rem]">{site.name}</h1>
-          <p className="mt-1 text-muted">
-            {site.role} in {site.location}
-          </p>
+          <p className="mt-1 text-muted">{`${site.role} in ${site.location}`}</p>
         </header>
 
         <main id="content" tabIndex={-1}>
@@ -105,9 +103,7 @@ function Home() {
         </main>
 
         <footer className="mt-20 text-sm text-muted">
-          <p>
-            &copy; {new Date().getFullYear()} {site.name}
-          </p>
+          <p>{`© ${new Date().getFullYear()} ${site.name}`}</p>
         </footer>
       </div>
     </>
