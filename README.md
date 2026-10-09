@@ -20,10 +20,10 @@ pnpm typecheck
 
 ## Editing content
 
-Everything lives in **`src/content.ts`**: name, intro, links, projects, company, current role, metadata.
+Everything lives in **`src/content.ts`**: name, intro, links, experience, projects, metadata.
 
 - **Projects** — add `href` to make a title a link; without it the title renders as plain text. Order = display order.
-- **Professional Work** — fill in `company.name` and `company.url` (plus `description`, `relationship`). The section stays hidden until both are set.
+- **Experience** — `experience` list (Impossible Solutions, Proconex). Order = display order.
 - **Resume** — replace `public/pdf/24_25_resume.pdf`, or add a new file and update `site.resume`.
 
 Styles and color tokens are in `src/styles.css`. The theme follows the OS until a visitor uses the toggle (`src/components/ThemeToggle.tsx`), which sets `<html data-theme>` and saves the choice in localStorage. The page markup is `src/routes/index.tsx`; `<head>` metadata and JSON-LD are in `src/routes/__root.tsx`.

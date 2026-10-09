@@ -2,13 +2,11 @@ import type { ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { ContactForm } from "../components/ContactForm";
 import { ThemeToggle } from "../components/ThemeToggle";
-import { company, experience, intro, profiles, projects, site } from "../content";
+import { experience, intro, profiles, projects, site } from "../content";
 
 export const Route = createFileRoute("/")({
   component: Home,
 });
-
-const hasCompany = Boolean(company.name && company.url);
 
 function Home() {
   return (
@@ -17,7 +15,7 @@ function Home() {
         Skip to content
       </a>
 
-      <div className="mx-auto max-w-[680px] px-5 pt-16 pb-12 sm:px-6 sm:pt-24 md:pt-32">
+      <div className="mx-auto max-w-[760px] px-5 pt-16 pb-12 sm:px-6 sm:pt-24 md:pt-32">
         <header>
           <div className="flex items-start justify-between gap-4">
             <h1 className="text-[1.75rem] leading-tight font-medium tracking-tight sm:text-[2rem]">{site.name}</h1>
@@ -33,25 +31,22 @@ function Home() {
             ))}
           </div>
 
-          <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-1" aria-label="Links">
-            <li>
-              <External href={site.resume} className="inline-block py-1">
-                Resume
-              </External>
-            </li>
-            {profiles.map((p) => (
-              <li key={p.href}>
-                <External href={p.href} className="inline-block py-1">
-                  {p.label}
-                </External>
-              </li>
-            ))}
-            <li>
-              <a href={`mailto:${site.email}`} className="inline-block py-1">
-                Email
-              </a>
-            </li>
-          </ul>
+          <Section id="experience" title="Experience">
+            <ul className="space-y-6">
+              {experience.map((r) => (
+                <li key={r.org}>
+                  <h3 className="font-medium">
+                    <External href={r.href}>{r.org}</External>
+                  </h3>
+                  <p className="text-sm text-muted">{r.role}</p>
+                  {r.description && <p className="mt-1 text-muted">{r.description}</p>}
+                </li>
+              ))}
+            </ul>
+            <p className="mt-6">
+              <External href={site.resume}>Full resume (PDF)</External>
+            </p>
+          </Section>
 
           <Section id="work" title="Selected Work">
             <ul className="space-y-6">
@@ -67,38 +62,16 @@ function Home() {
             </ul>
           </Section>
 
-          {hasCompany && (
-            <Section id="professional-work" title="Professional Work">
-              <p>
-                {company.relationship && <>{company.relationship} </>}
-                <External href={company.url} className="font-medium">
-                  {company.name}
-                </External>
-                {company.description && <>. {company.description}</>}
-              </p>
-            </Section>
-          )}
-
-          <Section id="experience" title="Experience">
-            <p>
-              Currently a {experience.current.role.toLowerCase()} at{" "}
-              <External href={experience.current.href}>{experience.current.org}</External>.
-            </p>
-            <p className="mt-2 text-muted">
-              The full picture is in my <External href={site.resume}>resume (PDF)</External>.
-            </p>
-          </Section>
-
           <Section id="contact" title="Contact">
             <p>
-              The best way to reach me is by email at <a href={`mailto:${site.email}`}>{site.email}</a>, or on{" "}
+              Have a project in mind, or just want to say hello? Send me a message below, or find me on{" "}
               {profiles.map((p, i) => (
                 <span key={p.href}>
-                  {i > 0 && (i === profiles.length - 1 ? " or " : ", ")}
+                  {i > 0 && (i === profiles.length - 1 ? " and " : ", ")}
                   <External href={p.href}>{p.label}</External>
                 </span>
               ))}
-              . You can also send a message here:
+              .
             </p>
             <div className="mt-8">
               <ContactForm />

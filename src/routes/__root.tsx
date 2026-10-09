@@ -12,7 +12,7 @@ const personJsonLd = {
   jobTitle: site.role,
   email: `mailto:${site.email}`,
   address: { "@type": "PostalAddress", addressLocality: "Philadelphia", addressRegion: "PA", addressCountry: "US" },
-  worksFor: { "@type": "Organization", name: experience.current.org, url: experience.current.href },
+  worksFor: experience.map((r) => ({ "@type": "Organization", name: r.org, url: r.href })),
   sameAs: profiles.map((p) => p.href),
 };
 
@@ -75,7 +75,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 
 function NotFound() {
   return (
-    <main className="mx-auto max-w-[680px] px-6 py-24">
+    <main className="mx-auto max-w-[760px] px-6 py-24">
       <h1 className="text-2xl font-medium">Page not found</h1>
       <p className="mt-4 text-muted">
         <a href="/">Back to the homepage</a>
