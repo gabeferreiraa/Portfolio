@@ -1,30 +1,12 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { ScrollSmoother } from "gsap/dist/ScrollSmoother";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-
-
-gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollSmoother);
 
 export default function Page() {
   const spotlightRef = useRef<HTMLDivElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const wrapperRef = useRef<HTMLDivElement | null>(null);
-  const contentRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    // Safe matchMedia usage (client-only)
-    console.log(
-      "reduce motion?",
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    );
-  }, []);
-
-  // Spotlight follows pointer
   useEffect(() => {
     const el = spotlightRef.current;
     if (!el) return;
@@ -41,434 +23,294 @@ export default function Page() {
     return () => window.removeEventListener("pointermove", onMove);
   }, []);
 
-  useGSAP(
-    () => {
-      const reduceMotion = window.matchMedia?.(
-        "(prefers-reduced-motion: reduce)"
-      )?.matches;
+  // Close mobile menu on escape key
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && menuOpen) setMenuOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
 
-      if (reduceMotion) {
-        ScrollTrigger.getAll().forEach((t) => t.kill());
-        return;
-      }
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
 
-      const smoother = ScrollSmoother.create({
-        wrapper: wrapperRef.current!,
-        content: contentRef.current!,
-        smooth: 1.2,
-        effects: true,
-        normalizeScroll: true,
-        smoothTouch: 0.08,
-      });
+  // Initialize theme from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("theme") as "dark" | "light" | null;
+    if (saved) {
+      setTheme(saved);
+      document.documentElement.classList.toggle("light", saved === "light");
+    }
+  }, []);
 
-      // Important for some setups: make ScrollTrigger compute against the wrapper
-      ScrollTrigger.defaults({ scroller: wrapperRef.current! });
+  function toggleTheme() {
+    const next = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    localStorage.setItem("theme", next);
+    document.documentElement.classList.toggle("light", next === "light");
+  }
 
-      // Reveal animations
-      gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => {
-        gsap.fromTo(
-          el,
-          { y: 22, opacity: 0, filter: "blur(6px)" },
-          {
-            y: 0,
-            opacity: 1,
-            filter: "blur(0px)",
-            duration: 0.9,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: el,
-              start: "top 80%",
-              end: "top 40%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      });
-
-      // Card stagger
-      const cards = gsap.utils.toArray<HTMLElement>("[data-card]");
-      gsap.fromTo(
-        cards,
-        { y: 18, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.7,
-          ease: "power2.out",
-          stagger: 0.08,
-          scrollTrigger: {
-            trigger: "[data-cards]",
-            start: "top 80%",
-          },
-        }
-      );
-
-      // Ensure layout is measured correctly
-      requestAnimationFrame(() => ScrollTrigger.refresh());
-
-      return () => {
-        smoother.kill();
-        ScrollTrigger.getAll().forEach((t) => t.kill());
-      };
-    },
-    { scope: contentRef }
-  );
+  const navItems = [
+    { href: "/", label: "About", active: true },
+    { href: "/experience", label: "Experience", active: false },
+    { href: "/contact", label: "Contact", active: false },
+  ];
 
   return (
-    <div id="smooth-wrapper" ref={wrapperRef}>
-      <div
-        id="smooth-content"
-        ref={contentRef}
-        className="bg-background text-foreground"
-      >
-        <div className="group/spotlight relative">
-          {/* Spotlight layer (decorative) */}
+    <>
+      <a href="#content" className="skip-link">
+        Skip to main content
+      </a>
+
+      <div role="presentation" className="bg-background text-foreground transition-colors duration-300">
+        <div role="presentation" className="group/spotlight relative">
           <div
             ref={spotlightRef}
             className="pointer-events-none fixed inset-0 z-30 transition duration-300 lg:absolute spotlight-bg"
             aria-hidden="true"
           />
 
-          {/* Skip link uses your existing global .skip-link */}
-          <a href="#content" className="skip-link">
-            Skip to Content
-          </a>
-
-          {/* ===== TOP: Brittany structure, your palette ===== */}
-          <div className="mx-auto min-h-screen max-w-screen-xl px-6 py-12 md:px-12 md:py-16 lg:py-0">
-            <div className="lg:flex lg:justify-between lg:gap-4">
-              <header className="lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-[48%] lg:flex-col lg:justify-between lg:py-24">
+          <div className="mx-auto min-h-screen max-w-screen-xl px-6 py-12 md:px-12 md:py-20 lg:px-24 lg:py-0">
+            <div className="lg:flex lg:justify-between lg:gap-10">
+              {/* LEFT COLUMN */}
+              <header aria-label="Gabriel Ferreira – Frontend Engineer" className="lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-1/2 lg:flex-col lg:justify-between lg:py-24">
                 <div>
-                  <h1
-                    className="text-2xl font-bold tracking-tight text-neutral-white sm:text-5xl whitespace-nowrap"
-                    data-reveal
-                  >
-                    <Link href="/">Gabriel Ferreira</Link>
+                  <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+                    <span className="text-foreground">
+                      Gabriel Ferreira
+                    </span>
                   </h1>
 
-                  <h2
-                    className="mt-3 text-lg font-medium tracking-tight text-neutral-white sm:text-xl"
-                    data-reveal
-                  >
-                    UX/UI Engineer
-                  </h2>
-
                   <p
-                    className="mt-4 max-w-xs leading-normal text-neutral-light"
-                    data-reveal
+                    className="mt-3 text-base font-medium tracking-tight sm:text-lg"
+                    role="doc-subtitle"
                   >
+                    Frontend Engineer
+                  </p>
+
+                  <p className="mt-4 max-w-xs leading-normal text-foreground">
                     I bring your idea to life, and opportunity keeps you growing
                     beyond delivery
                   </p>
 
-                  <nav
-                    className="hidden lg:block"
-                    aria-label="In-page jump links"
-                    data-reveal
+                  {/* Mobile hamburger button */}
+                  <button
+                    type="button"
+                    className="mt-6 flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground hover:bg-foreground/10 transition-colors lg:hidden"
+                    onClick={() => setMenuOpen(!menuOpen)}
+                    aria-expanded={menuOpen}
+                    aria-controls="nav-menu"
+                    aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
                   >
-                    <ul className="mt-16 w-max">
-                      {[
-                        { href: "#about", label: "About" },
-                        { href: "#selected-work", label: "Projects" },
-                        { href: "#lets-build", label: "Contact" },
-                      ].map((x) => (
-                        <li key={x.href}>
-                          <a
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="h-5 w-5"
+                      aria-hidden="true"
+                    >
+                      {menuOpen ? (
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      ) : (
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                      )}
+                    </svg>
+                    Menu
+                  </button>
+
+                  {/* Navigation */}
+                  <nav
+                    id="nav-menu"
+                    className={`${menuOpen ? "block" : "hidden"} lg:block`}
+                    aria-label="Jump to section"
+                  >
+                    <ul className="mt-4 w-max lg:mt-16" role="list" aria-label="Page sections">
+                      {navItems.map((x) => (
+                        <li key={x.href} aria-label={x.label}>
+                          <Link
                             className="group flex items-center py-3"
                             href={x.href}
+                            aria-current={x.active ? "page" : undefined}
+                            onClick={() => setMenuOpen(false)}
                           >
-                            <span className="mr-4 h-px w-8 bg-neutral-mid/70 transition-all group-hover:w-16 group-hover:bg-neutral-white group-focus-visible:w-16 group-focus-visible:bg-neutral-white motion-reduce:transition-none" />
-                            <span className="text-xs font-bold uppercase tracking-widest text-neutral-mid group-hover:text-neutral-white group-focus-visible:text-neutral-white">
+                            <span
+                              className={`nav-indicator mr-4 h-px ${x.active ? "w-16 bg-foreground" : "w-8 bg-foreground/30 group-hover:w-16 group-hover:bg-foreground group-focus-visible:w-16 group-focus-visible:bg-foreground"} motion-reduce:transition-none transition-all duration-200`}
+                              aria-hidden="true"
+                            />
+                            <span className={`text-xs font-bold uppercase tracking-widest ${x.active ? "text-foreground" : "text-foreground group-hover:text-foreground group-focus-visible:text-foreground"} transition-colors duration-200`}>
                               {x.label}
                             </span>
-                          </a>
+                          </Link>
                         </li>
                       ))}
                     </ul>
                   </nav>
                 </div>
 
-                <div className="mt-10 text-neutral-mid text-sm" data-reveal>
-                  {/* social icons row goes here */}
+                {/* Social links + theme toggle */}
+                <div role="presentation" className="ml-1 mt-8 flex items-center gap-5">
+                  <nav aria-label="Social media links">
+                    <ul className="flex items-center gap-5" role="list" aria-label="Social media profiles">
+                      <li className="shrink-0 text-xs" aria-label="GitHub">
+                        <a
+                          className="block text-foreground hover:text-foreground focus-visible:text-foreground transition-colors"
+                          href="https://github.com/gabeferreiraa"
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          aria-label="GitHub profile (opens in a new tab)"
+                          title="GitHub"
+                        >
+                          <span className="sr-only">GitHub</span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 16 16"
+                            fill="currentColor"
+                            className="h-6 w-6"
+                            aria-hidden="true"
+                          >
+                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+                          </svg>
+                        </a>
+                      </li>
+
+                      <li className="shrink-0 text-xs" aria-label="LinkedIn">
+                        <a
+                          className="block text-foreground hover:text-foreground focus-visible:text-foreground transition-colors"
+                          href="https://www.linkedin.com/in/gabriel-ferreira-544b95251/"
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          aria-label="LinkedIn profile (opens in a new tab)"
+                          title="LinkedIn"
+                        >
+                          <span className="sr-only">LinkedIn</span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="h-6 w-6"
+                            aria-hidden="true"
+                          >
+                            <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z" />
+                          </svg>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+
+                  <button
+                    type="button"
+                    onClick={toggleTheme}
+                    className="rounded-md p-2 text-foreground hover:text-foreground hover:bg-foreground/10 focus-visible:text-foreground transition-colors"
+                    aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                  >
+                    {theme === "dark" ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden="true">
+                        <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden="true">
+                        <path fillRule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </button>
                 </div>
               </header>
 
+              {/* RIGHT COLUMN */}
               <main
                 id="content"
+                aria-label="Portfolio content"
                 tabIndex={-1}
-                className="pt-24 lg:w-[52%] lg:py-24"
+                className="pt-24 lg:w-1/2 lg:py-24"
               >
+                {/* About */}
                 <section
                   id="about"
-                  className="mb-16 scroll-mt-16 md:mb-24 lg:mb-28 lg:scroll-mt-24"
-                  aria-label="About me"
+                  className="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24"
+                  aria-labelledby="about-heading"
                 >
-                  {/* Mobile sticky section label (Brittany-style) */}
-                  <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-background/80 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
-                    <h2 className="text-sm font-bold uppercase tracking-widest text-neutral-white lg:sr-only">
+                  <header className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-background/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+                    <h2
+                      id="about-heading"
+                      className="text-sm font-bold uppercase tracking-widest text-foreground lg:sr-only"
+                    >
                       About
                     </h2>
-                  </div>
+                  </header>
 
-                  <div className="space-y-4 text-neutral-light">
-                    <p data-reveal>
+                  <div className="text-foreground">
+                    <p className="mb-4">
                       I&apos;m a UI/UX engineer who is driven to deliver
                       accessible, unique, and meticulous applications. I
-                      specialize in web-accessibility, design, development and
-                      optimization of applications
+                      specialize in web accessibility, design, development, and
+                      optimization of applications.
                     </p>
 
-                    <p data-reveal>
-                      Currently I&apos;m based in Philadelphia, PA where I work
-                      as a part-time Software Developer @ {" "}
+                    <p className="mb-4">
+                      Currently, I&apos;m a senior frontend engineer at{" "}
                       <a
-                        className="font-medium text-neutral-white hover:text-tertiary-mid focus-visible:text-tertiary-mid"
-                        href="https://www.proconexdirect.com"
+                        className="font-medium text-foreground hover:text-tertiary-mid focus-visible:text-tertiary-mid transition-colors"
+                        href="https://www.proconexdirect.com/"
                         target="_blank"
                         rel="noreferrer noopener"
-                        aria-label="Proconex (opens in a new tab)"
+                        aria-label="Proconex company website (opens in a new tab)"
                       >
                         Proconex
                       </a>
-                      .
+                      . Throughout my time as a developer I&apos;ve been able to
+                      develop software across different applications—whether it
+                      was troubleshooting or starting from zero—there was always
+                      an opportunity for success.
                     </p>
 
-                    <p data-reveal>
-                      Throughout my time as a developer I&apos;ve been able to
-                      develop software across different applications, whether it
-                      was trouble shooting or starting from zero, there was
-                      always an opportunity for success.
-                    </p>
-
-                    <p data-reveal>
-                      If you have any questions please reach out, and I&apos;ll
-                      respond as soon as I&apos;m available!
+                    <p>
+                      If you have any questions, please reach out, and I&apos;ll
+                      respond as soon as I&apos;m available.
                     </p>
                   </div>
                 </section>
+
+                 <footer aria-label="Site credits and contact information" className="max-w-md pb-16 text-sm text-foreground sm:pb-0">
+                  <p>
+                    Built with{" "}
+                    <a
+                      href="https://nextjs.org/"
+                      className="font-medium text-foreground hover:text-tertiary-mid focus-visible:text-tertiary-mid transition-colors"
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      aria-label="Next.js React framework (opens in a new tab)"
+                    >
+                      Next.js
+                    </a>{" "}
+                    and{" "}
+                    <a
+                      href="https://tailwindcss.com/"
+                      className="font-medium text-foreground hover:text-tertiary-mid focus-visible:text-tertiary-mid transition-colors"
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      aria-label="Tailwind CSS framework (opens in a new tab)"
+                    >
+                      Tailwind CSS
+                    </a>
+                    .
+                  </p>
+                  <address className="mt-6 not-italic">
+                    <a
+                      href="mailto:gferreira0404@gmail.com"
+                      className="font-medium text-foreground hover:text-tertiary-mid focus-visible:text-tertiary-mid transition-colors"
+                      aria-label="Send email to Gabriel Ferreira"
+                    >
+                      gferreira0404@gmail.com
+                    </a>
+                  </address>
+                </footer>
               </main>
             </div>
           </div>
-
-          {/* ===== BELOW: your original sections ===== */}
-          <section
-            id="selected-work"
-            className="mx-auto w-full max-w-6xl px-8 md:px-2"
-            aria-label="Selected work"
-          >
-            <div className="min-h-[110vh] py-24 md:py-32">
-              <div className="flex items-end justify-between gap-8">
-                <h2
-                  className="text-3xl md:text-4xl font-semibold tracking-tight text-neutral-white"
-                  data-reveal
-                >
-                  Selected Work
-                </h2>
-              </div>
-
-              <div
-                className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2"
-                data-cards
-                role="list"
-                aria-label="Project cards"
-              >
-                {[
-                  {
-                    title: "Moonrise Meditation",
-                    tag: "Expo Go • React Native • Dolby Atmos Audio",
-                    description: "Curated a mobile app with 5 time grammy winning artist Jeff Bhasker to create a meditative experience",
-                    image: "",
-                    slug: "moonrise-meditation",
-                  },
-                  {
-                    title: "Out&Abt",
-                    tag: "Expo Go • React Native • Figma",
-                    description: "Junior project",
-                    image: "/images/outnabt-cover.png",
-                    slug: "out-abt",
-                  },
-                  {
-                    title: "Impossible Solutions",
-                    tag: "NextJS • React • Company",
-                    description: "Custom website for a new tech startup",
-                    image: "",
-                    slug: "impossible-solutions",
-                  },
-                  {
-                    title: "Drexel EGS",
-                    tag: "Wordpress • Elementor • Academic",
-                    description: "Custom wordpress website for Drexel University's Entrepreneurial Gaming Studio ",
-                    image: "/images/egs-hero.png",
-                    slug: "drexel-egs",
-                  },
-                ].map((p) => (
-                  <Link
-                    key={p.title}
-                    href={`/work#${p.slug}`}
-                    data-card
-                    role="listitem"
-                    className="rounded-2xl border border-neutral-white/10 bg-neutral-white/5 p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] transition-colors duration-200 hover:bg-neutral-white/10 no-underline"
-                  >
-                    <div className="flex items-center justify-between gap-4">
-                      <h3 className="text-xl font-medium text-neutral-white">
-                        {p.title}
-                      </h3>
-                      <span className="text-xs rounded-full border border-neutral-white/10 bg-neutral-white/5 px-3 py-1 text-neutral-light">
-                        Project
-                      </span>
-                    </div>
-                    <p className="mt-2 text-sm font-light text-neutral-light">
-                      {p.tag}
-                    </p>
-
-                    <div
-                      className="mt-6 h-32 max-h-32 shrink-0 overflow-hidden rounded-xl bg-neutral-white/5"
-                      data-speed="0.85"
-                      aria-hidden="true"
-                    >
-                      {p.image ? (
-                        <img
-                          src={p.image}
-                          alt={p.title}
-                          className="h-32 w-full object-cover object-top"
-                        />
-                      ) : (
-                        <div className="h-full w-full bg-gradient-to-b from-neutral-white/10 to-transparent" />
-                      )}
-                    </div>
-
-                    <p className="mt-4 text-sm font-light text-neutral-light">
-                      {p.description}
-                    </p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <section
-            className="mx-auto w-full max-w-6xl px-8 md:px-2"
-            aria-label="How I work"
-          >
-            <div className="min-h-[110vh] py-24 md:py-32">
-              <h2
-                className="text-3xl md:text-4xl font-semibold tracking-tight text-neutral-white"
-                data-reveal
-              >
-                How I Work
-              </h2>
-
-              <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-[1fr_420px]">
-                <div className="space-y-6 text-neutral-light font-light leading-6">
-                  <p data-reveal>
-                    I like building interfaces that feel quiet and intentional —
-                    clean hierarchy, smooth motion, and just enough personality
-                    to be memorable.
-                  </p>
-                  <p data-reveal>
-                    The experience should be the most important thing the user takes away from my work.
-                  </p>
-                  <p data-reveal>
-                    I&apos;m very open and prefer to call clients instead of messaging, in the calls we can bounce ideas back and forth to 
-                    find the perfect opportunity for you.
-                  </p>
-                </div>
-
-                <div
-                  className="rounded-2xl border border-neutral-white/10 bg-neutral-white/5 p-6"
-                  data-speed="0.92"
-                  aria-label="Highlights"
-                >
-                  <p
-                    className="text-sm text-neutral-light font-light"
-                    data-reveal
-                  >
-                    “Opportunity keeps you growing beyond delivery.”
-                  </p>
-
-                  <div className="mt-6 space-y-3" aria-label="Focus areas">
-                    {[
-                      "Design systems",
-                      "Motion & micro-interactions",
-                      "Accessible UI",
-                      "Performance + polish",
-                    ].map((x) => (
-                      <div
-                        key={x}
-                        className="rounded-xl border border-neutral-white/10 bg-neutral-white/5 px-4 py-3 text-neutral-white/90"
-                        data-reveal
-                      >
-                        {x}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section
-            id="lets-build"
-            className="mx-auto w-full max-w-6xl px-8 pb-28 md:px-2"
-            aria-label="Contact"
-          >
-            <div className="min-h-[95vh] py-24 md:py-24">
-              <h2
-                className="text-3xl md:text-4xl font-semibold tracking-tight text-neutral-white"
-                data-reveal
-              >
-                Let’s Build Something
-              </h2>
-
-              <div
-                className="mt-10 rounded-2xl border border-neutral-white/10 bg-neutral-white/5 p-8"
-                data-reveal
-              >
-                <p className="text-neutral-light font-light max-w-2xl">
-                  Feel free to reach out to me via email, linkedin, or github, or take a look at my resume below.
-                </p>
-
-                <div
-                  className="mt-8 flex flex-wrap gap-3"
-                  aria-label="Contact actions"
-                >
-                  <Link
-                    href="mailto:gferreira0404@gmail.com"
-                    className="rounded-md border border-neutral-white/10 bg-neutral-white/5 px-4 py-2 text-sm font-medium text-neutral-white hover:bg-neutral-white/10 transition no-underline"
-                  >
-                    Email
-                  </Link>
-                  <Link
-                    href="https://www.linkedin.com/in/gabriel-ferreira-544b95251/"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="rounded-md border border-neutral-white/10 bg-neutral-white/5 px-4 py-2 text-sm font-medium text-neutral-white hover:bg-neutral-white/10 transition no-underline"
-                  >
-                    LinkedIn
-                  </Link>
-                  <Link
-                    href="https://github.com/gabeferreiraa"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="rounded-md border border-neutral-white/10 bg-neutral-white/5 px-4 py-2 text-sm font-medium text-neutral-white hover:bg-neutral-white/10 transition no-underline"
-                  >
-                    GitHub
-                  </Link>
-                  <Link
-                    href="/pdf/24_25_resume.pdf" 
-                    download="gabriel-ferreira-resume.pdf"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="rounded-md border border-neutral-white/10 bg-neutral-white/5 px-4 py-2 text-sm font-medium text-neutral-white hover:bg-neutral-white/10 transition no-underline"
-                  >
-                    Resume 
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </section>
         </div>
       </div>
-    </div>
+    </>
   );
 }

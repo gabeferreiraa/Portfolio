@@ -10,7 +10,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Gabriel Ferreira's Portfolio",
-  description: "...",
+  description: "Gabriel Ferreira — Frontend Engineer specializing in web accessibility, design, and development.",
 };
 
 export default function RootLayout({
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       {/* <a href="#content" className="skip-link">
         Skip to main content
       </a> */}

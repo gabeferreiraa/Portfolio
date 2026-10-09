@@ -9,8 +9,8 @@
   --color-secondary-dark: #2e2a6b;
   --color-secondary-light: #c7d0ff;
 
-  --color-tertiary-mid: #2ec4b6;
-  --color-tertiary-light: #6ee7dc;
+  --color-tertiary-mid: #56d4c8;
+  --color-tertiary-light: #93f0e6;
 
   --color-neutral-black: #0f1115;
   --color-neutral-dark: #2a2e35;
@@ -25,7 +25,7 @@
   --color-focus: var(--color-tertiary-mid);
 
   /* Spotlight effect (RGB triplet) */
-  --color-spotlight-rgb: 46 196 182;
+  --color-spotlight-rgb: 86 212 200;
 }
 
 /* Responsive typography */
@@ -200,14 +200,35 @@ img {
   }
 }
 
-/* Dark/Light Mode Support
-@media (prefers-color-scheme: light) {
-  :root {
-    --color-background: #ffffff;
-    --color-foreground: var(--color-neutral-black);
-    --color-neutral-light: #475569;
-  }
-} */
+/* Light Mode (toggled via .light class on <html>) */
+html.light {
+  --color-background: #ffffff;
+  --color-foreground: #0a1733;
+  --color-neutral-dark: #e2e5ea;
+  --color-neutral-mid: #94a3b8;
+  --color-tertiary-mid: #0e7569;
+  --color-tertiary-light: #0c6b60;
+  --color-spotlight-rgb: 10 23 51;
+}
+
+html.light .skip-link {
+  background: var(--color-primary-dark);
+  color: #ffffff;
+}
+
+html.light .submit-btn {
+  background: #0a1733 !important;
+  color: #ffffff !important;
+}
+
+html.light .submit-btn:hover {
+  background: #123a63 !important;
+}
+
+html.light ::selection {
+  background-color: rgba(10, 23, 51, 0.15);
+  color: var(--color-foreground);
+}
 
 /* Print Styles */
 @media print {
@@ -250,7 +271,7 @@ img {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-primary-dark);
+  background: var(--color-background);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -265,7 +286,7 @@ img {
 /* Firefox scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-neutral-mid) var(--color-primary-dark);
+  scrollbar-color: var(--color-neutral-mid) var(--color-background);
 }
 
 /* Backdrop Blur Support */
@@ -278,7 +299,7 @@ img {
 
 @supports not (backdrop-filter: blur(12px)) {
   .backdrop-blur {
-    background: var(--color-primary-dark) !important;
+    background: var(--color-background) !important;
   }
 }
 
@@ -287,7 +308,7 @@ img {
   .backdrop-blur {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    background: var(--color-primary-dark) !important;
+    background: var(--color-background) !important;
   }
   
   .spotlight-bg {
