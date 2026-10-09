@@ -6,7 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { ScrollSmoother } from "gsap/dist/ScrollSmoother";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollSmoother);
 
@@ -220,7 +220,7 @@ export default function Page() {
 
                     <p data-reveal>
                       Currently I&apos;m based in Philadelphia, PA where I work
-                      as a part-time Software Developer @{" "}
+                      as a part-time Software Developer @ {" "}
                       <a
                         className="font-medium text-neutral-white hover:text-tertiary-mid focus-visible:text-tertiary-mid"
                         href="https://www.proconexdirect.com"
@@ -264,13 +264,6 @@ export default function Page() {
                 >
                   Selected Work
                 </h2>
-                <p
-                  className="max-w-sm text-neutral-light font-light"
-                  data-reveal
-                >
-                  A few fake “cards” so we can see smooth scroll + reveal
-                  transitions.
-                </p>
               </div>
 
               <div
@@ -282,30 +275,46 @@ export default function Page() {
                 {[
                   {
                     title: "Moonrise Meditation",
-                    tag: "Mobile • Audio • Calm UX",
-                  },
-                  { title: "Out&Abt", tag: "Events • Social • Philly" },
-                  {
-                    title: "Enterprise UI Systems",
-                    tag: "Angular • PrimeNG • Scale",
+                    tag: "Expo Go • React Native • Dolby Atmos Audio",
+                    description: "Curated a mobile app with 5 time grammy winning artist Jeff Bhasker to create a meditative experience",
+                    image: "",
+                    slug: "moonrise-meditation",
                   },
                   {
-                    title: "Automation Suite",
-                    tag: "Selenium • C# • Reliability",
+                    title: "Out&Abt",
+                    tag: "Expo Go • React Native • Figma",
+                    description: "Junior project",
+                    image: "/images/outnabt-cover.png",
+                    slug: "out-abt",
+                  },
+                  {
+                    title: "Impossible Solutions",
+                    tag: "NextJS • React • Company",
+                    description: "Custom website for a new tech startup",
+                    image: "",
+                    slug: "impossible-solutions",
+                  },
+                  {
+                    title: "Drexel EGS",
+                    tag: "Wordpress • Elementor • Academic",
+                    description: "Custom wordpress website for Drexel University's Entrepreneurial Gaming Studio ",
+                    image: "/images/egs-hero.png",
+                    slug: "drexel-egs",
                   },
                 ].map((p) => (
-                  <div
+                  <Link
                     key={p.title}
+                    href={`/work#${p.slug}`}
                     data-card
                     role="listitem"
-                    className="rounded-2xl border border-neutral-white/10 bg-neutral-white/5 p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.03)]"
+                    className="rounded-2xl border border-neutral-white/10 bg-neutral-white/5 p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] transition-colors duration-200 hover:bg-neutral-white/10 no-underline"
                   >
                     <div className="flex items-center justify-between gap-4">
                       <h3 className="text-xl font-medium text-neutral-white">
                         {p.title}
                       </h3>
                       <span className="text-xs rounded-full border border-neutral-white/10 bg-neutral-white/5 px-3 py-1 text-neutral-light">
-                        Case Study
+                        Project
                       </span>
                     </div>
                     <p className="mt-2 text-sm font-light text-neutral-light">
@@ -313,18 +322,25 @@ export default function Page() {
                     </p>
 
                     <div
-                      className="mt-6 h-32 overflow-hidden rounded-xl bg-neutral-white/5"
+                      className="mt-6 h-32 max-h-32 shrink-0 overflow-hidden rounded-xl bg-neutral-white/5"
                       data-speed="0.85"
                       aria-hidden="true"
                     >
-                      <div className="h-full w-full bg-gradient-to-b from-neutral-white/10 to-transparent" />
+                      {p.image ? (
+                        <img
+                          src={p.image}
+                          alt={p.title}
+                          className="h-32 w-full object-cover object-top"
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-gradient-to-b from-neutral-white/10 to-transparent" />
+                      )}
                     </div>
 
                     <p className="mt-4 text-sm font-light text-neutral-light">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Tempus leo eu aenean sed diam urna tempor.
+                      {p.description}
                     </p>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -350,12 +366,11 @@ export default function Page() {
                     to be memorable.
                   </p>
                   <p data-reveal>
-                    This section is intentionally tall so you can feel
-                    ScrollSmoother’s inertia and see the reveals as you move.
+                    The experience should be the most important thing the user takes away from my work.
                   </p>
                   <p data-reveal>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quisque faucibus ex sapien vitae pellentesque sem placerat.
+                    I&apos;m very open and prefer to call clients instead of messaging, in the calls we can bounce ideas back and forth to 
+                    find the perfect opportunity for you.
                   </p>
                 </div>
 
@@ -410,26 +425,44 @@ export default function Page() {
                 data-reveal
               >
                 <p className="text-neutral-light font-light max-w-2xl">
-                  Placeholder call-to-action. Scroll up/down a few times to
-                  really feel the smoothing + the way elements “settle” into
-                  place.
+                  Feel free to reach out to me via email, linkedin, or github, or take a look at my resume below.
                 </p>
 
                 <div
                   className="mt-8 flex flex-wrap gap-3"
                   aria-label="Contact actions"
                 >
-                  {["Email", "LinkedIn", "GitHub", "Resume"].map((x) => (
-                    <Button
-                      key={x}
-                      className="hover:bg-neutral-white/10 transition"
-                      variant="secondary"
-                      type="button"
-                      aria-label={x}
-                    >
-                      {x}
-                    </Button>
-                  ))}
+                  <Link
+                    href="mailto:gferreira0404@gmail.com"
+                    className="rounded-md border border-neutral-white/10 bg-neutral-white/5 px-4 py-2 text-sm font-medium text-neutral-white hover:bg-neutral-white/10 transition no-underline"
+                  >
+                    Email
+                  </Link>
+                  <Link
+                    href="https://www.linkedin.com/in/gabriel-ferreira-544b95251/"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="rounded-md border border-neutral-white/10 bg-neutral-white/5 px-4 py-2 text-sm font-medium text-neutral-white hover:bg-neutral-white/10 transition no-underline"
+                  >
+                    LinkedIn
+                  </Link>
+                  <Link
+                    href="https://github.com/gabeferreiraa"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="rounded-md border border-neutral-white/10 bg-neutral-white/5 px-4 py-2 text-sm font-medium text-neutral-white hover:bg-neutral-white/10 transition no-underline"
+                  >
+                    GitHub
+                  </Link>
+                  <Link
+                    href="/pdf/24_25_resume.pdf" 
+                    download="gabriel-ferreira-resume.pdf"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="rounded-md border border-neutral-white/10 bg-neutral-white/5 px-4 py-2 text-sm font-medium text-neutral-white hover:bg-neutral-white/10 transition no-underline"
+                  >
+                    Resume 
+                  </Link>
                 </div>
               </div>
             </div>

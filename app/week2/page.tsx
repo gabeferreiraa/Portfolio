@@ -56,7 +56,7 @@ export default function Page() {
                   </h1>
 
                   <p className="mt-3 text-base font-medium tracking-tight sm:text-lg" role="doc-subtitle">
-                    Frontend Engineer
+                    UI/UX Engineer
                   </p>
 
                   <p className="mt-4 max-w-xs leading-normal text-neutral-light">
@@ -68,7 +68,22 @@ export default function Page() {
                   <nav className="hidden lg:block" aria-label="Jump to section">
                     <ul className="mt-16 w-max" role="list">
                       <li>
-                        <a className="group flex items-center py-3" href="#about" aria-label="Navigate to About section">
+                        <a className="group flex items-center py-3" href="#week2" aria-label="Navigate to Home page">
+                          <span
+                            className="nav-indicator mr-4 h-px w-8 bg-neutral-mid group-hover:w-16 group-hover:bg-neutral-white group-focus-visible:w-16 group-focus-visible:bg-neutral-white motion-reduce:transition-none transition-all duration-200"
+                            aria-hidden="true"
+                          />
+                          <span className="text-xs font-bold uppercase tracking-widest text-neutral-mid group-hover:text-neutral-white group-focus-visible:text-neutral-white transition-colors duration-200">
+                            Home
+                          </span>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          className="group flex items-center py-3"
+                          href="#about"
+                          aria-label="Navigate to About page"
+                        >
                           <span
                             className="nav-indicator mr-4 h-px w-8 bg-neutral-mid group-hover:w-16 group-hover:bg-neutral-white group-focus-visible:w-16 group-focus-visible:bg-neutral-white motion-reduce:transition-none transition-all duration-200"
                             aria-hidden="true"
@@ -81,30 +96,15 @@ export default function Page() {
                       <li>
                         <a
                           className="group flex items-center py-3"
-                          href="#experience"
-                          aria-label="Navigate to Experience section"
+                          href="/week2/contact"
+                          aria-label="Navigate to contact page"
                         >
                           <span
                             className="nav-indicator mr-4 h-px w-8 bg-neutral-mid group-hover:w-16 group-hover:bg-neutral-white group-focus-visible:w-16 group-focus-visible:bg-neutral-white motion-reduce:transition-none transition-all duration-200"
                             aria-hidden="true"
                           />
                           <span className="text-xs font-bold uppercase tracking-widest text-neutral-mid group-hover:text-neutral-white group-focus-visible:text-neutral-white transition-colors duration-200">
-                            Experience
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          className="group flex items-center py-3"
-                          href="#projects"
-                          aria-label="Navigate to Projects section"
-                        >
-                          <span
-                            className="nav-indicator mr-4 h-px w-8 bg-neutral-mid group-hover:w-16 group-hover:bg-neutral-white group-focus-visible:w-16 group-focus-visible:bg-neutral-white motion-reduce:transition-none transition-all duration-200"
-                            aria-hidden="true"
-                          />
-                          <span className="text-xs font-bold uppercase tracking-widest text-neutral-mid group-hover:text-neutral-white group-focus-visible:text-neutral-white transition-colors duration-200">
-                            Projects
+                            Contact
                           </span>
                         </a>
                       </li>
@@ -163,36 +163,7 @@ export default function Page() {
                       </a>
                     </li>
 
-                    <li className="shrink-0 text-xs">
-                      <a
-                        className="block text-neutral-light hover:text-neutral-white focus-visible:text-neutral-white transition-colors"
-                        href="https://codepen.io/bchiang7"
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        aria-label="Visit Gabriel's CodePen profile (opens in a new tab)"
-                        title="CodePen"
-                      >
-                        <span className="sr-only">CodePen</span>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 64 64"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="h-6 w-6"
-                          aria-hidden="true"
-                          role="img"
-                        >
-                          <title>CodePen Logo</title>
-                          <path
-                            d="M3.06 41.732L32 60.932l28.94-19.2V22.268L32 3.068l-28.94 19.2zm57.878 0L32 22.268 3.06 41.732m0-19.463L32 41.47l28.94-19.2M32 3.068v19.2m0 19.463v19.2"
-                            strokeWidth="5"
-                          />
-                        </svg>
-                      </a>
-                    </li>
+
 
                     <li className="shrink-0 text-xs">
                       <a
@@ -218,29 +189,6 @@ export default function Page() {
                       </a>
                     </li>
 
-                    <li className="shrink-0 text-xs">
-                      <a
-                        className="block text-neutral-light hover:text-neutral-white focus-visible:text-neutral-white transition-colors"
-                        href="https://www.goodreads.com/user/show/143480747-brittany-chiang"
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        aria-label="Visit Gabriel's Goodreads profile (opens in a new tab)"
-                        title="Goodreads"
-                      >
-                        <span className="sr-only">Goodreads</span>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 1024 1024"
-                          fill="currentColor"
-                          className="h-6 w-6"
-                          aria-hidden="true"
-                          role="img"
-                        >
-                          <title>Goodreads Logo</title>
-                          <path d="M663.8 382.4c10.2 74.6-9.4 158-71.8 201.4-44.6 31-105.6 28.2-141.6 11.4-74.2-34.6-99-117.2-93.6-194.4 8.6-121.8 81.8-175.8 150.6-175 93.8-0.4 143.6 63.6 156.4 156.6zM960 176v672c0 61.8-50.2 112-112 112H176c-61.8 0-112-50.2-112-112V176c0-61.8 50.2-112 112-112h672c61.8 0 112 50.2 112 112zM724 626.4s-0.2-68-0.2-434.6h-58v80.6c-1.6 0.6-2.4-1-3.2-2.4-19.2-41.4-71.8-92.6-152-92-103.8 0.8-174.4 62.4-201.2 155.6-8.6 29.8-11.6 60.2-11 91.2 3.4 155.8 90.2 235.6 224.8 230.4 57.8-2.2 109-34 138-90.4 1-2 2.2-3.8 3.4-5.8 0.4 0.2 0.8 0.2 1.2 0.4 0.6 7.6 0.4 61.4 0.2 69-0.4 29.6-4 59-14.4 87-15.6 42-44.6 69.4-89 79-35.6 7.8-71.2 7.6-106.4-2.4-43-12.2-73-38-82.2-83.6-0.6-3.2-2.6-2.6-4.6-2.6h-53.6c1.6 21.2 6.4 40.6 17 58.4 48.4 81 165.4 97 256.4 74.8 99.8-24.6 134.6-109.8 134.8-212.6z" />
-                        </svg>
-                      </a>
-                    </li>
                   </ul>
                 </nav>
               </header>
@@ -276,7 +224,7 @@ export default function Page() {
                     </p>
 
                     <p className="mb-4">
-                      Currently, I&apos;m a senior frontend engineer at{" "}
+                      Currently, I&apos;m a junior developer at{" "}
                       <a
                         className="font-medium text-neutral-white hover:text-tertiary-mid focus-visible:text-tertiary-mid transition-colors"
                         href="https://www.proconexdirect.com/"

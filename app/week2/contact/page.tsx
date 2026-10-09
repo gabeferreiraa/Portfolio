@@ -154,6 +154,21 @@ export default function ContactPage() {
                   {/* Page navigation */}
                   <nav className="hidden lg:block" aria-label="Page navigation">
                     <ul className="mt-16 w-max" role="list">
+                        <li>
+                        <Link
+                          className="group flex items-center py-3"
+                          href="/week2#"
+                          aria-label="Navigate to Home page"
+                        >
+                          <span
+                            className="nav-indicator mr-4 h-px w-8 bg-neutral-mid group-hover:w-16 group-hover:bg-neutral-white group-focus-visible:w-16 group-focus-visible:bg-neutral-white motion-reduce:transition-none transition-all duration-200"
+                            aria-hidden="true"
+                          />
+                          <span className="text-xs font-bold uppercase tracking-widest text-neutral-mid group-hover:text-neutral-white group-focus-visible:text-neutral-white transition-colors duration-200">
+                            Home
+                          </span>
+                        </Link>
+                      </li>
                       <li>
                         <Link
                           className="group flex items-center py-3"
@@ -169,22 +184,7 @@ export default function ContactPage() {
                           </span>
                         </Link>
                       </li>
-                      <li>
-                        <Link
-                          className="group flex items-center py-3"
-                          href="/week2#experience"
-                          aria-label="Navigate to Experience section"
-                        >
-                          <span
-                            className="nav-indicator mr-4 h-px w-8 bg-neutral-mid group-hover:w-16 group-hover:bg-neutral-white group-focus-visible:w-16 group-focus-visible:bg-neutral-white motion-reduce:transition-none transition-all duration-200"
-                            aria-hidden="true"
-                          />
-                          <span className="text-xs font-bold uppercase tracking-widest text-neutral-mid group-hover:text-neutral-white group-focus-visible:text-neutral-white transition-colors duration-200">
-                            Experience
-                          </span>
-                        </Link>
-                      </li>
-                      <li>
+                        <li>
                         <Link
                           className="group flex items-center py-3"
                           href="/week2/contact"
