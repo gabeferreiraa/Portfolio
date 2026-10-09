@@ -10,7 +10,7 @@ export const site = {
   url: "https://gabrielferreira.org",
   title: "Gabriel Ferreira — UI/UX Developer",
   description:
-    "Gabriel Ferreira is a UI/UX developer in Philadelphia and the founder of Impossible Solutions, a software studio building websites and mobile apps.",
+    "Gabriel Ferreira is a UI/UX developer in Philadelphia — a junior developer at Linque and the founder of Impossible Solutions, a software studio building websites and mobile apps.",
   email: "gferreira0404@gmail.com",
   // Replace the file in /public/pdf (or change this path) to update the resume.
   resume: "/pdf/24_25_resume.pdf",
@@ -18,6 +18,7 @@ export const site = {
 
 export const intro = [
   "I design and build web and mobile applications. I care most about the parts people actually feel — accessibility, clear hierarchy, and details that hold up under a close look — because the experience is what people take away from the work.",
+  "Right now I'm a junior developer at Linque and the founder of Impossible Solutions, a software studio in Philadelphia.",
 ];
 
 export type Link = { label: string; href: string };
@@ -38,8 +39,10 @@ export type Role = {
 export const experience: Role[] = [
   {
     role: "Junior Developer · Current",
-    org: "Proconex",
-    href: "https://www.proconexdirect.com",
+    org: "Linque",
+    href: "https://www.linque.com/",
+    description:
+      "I started with a six-month co-op at Proconex in 2025 and stayed on as Proconex became Linque, an industrial intelligence company connecting IT, OT and AI systems.",
   },
   {
     role: "Founder",
