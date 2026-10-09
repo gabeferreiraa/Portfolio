@@ -12,7 +12,7 @@ const personJsonLd = {
   jobTitle: site.role,
   email: `mailto:${site.email}`,
   address: { "@type": "PostalAddress", addressLocality: "Philadelphia", addressRegion: "PA", addressCountry: "US" },
-  worksFor: experience.map((r) => ({ "@type": "Organization", name: r.org, url: r.href })),
+  worksFor: experience.filter((r) => r.current).map((r) => ({ "@type": "Organization", name: r.org, url: r.href })),
   sameAs: profiles.map((p) => p.href),
 };
 

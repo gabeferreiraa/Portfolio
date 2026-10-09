@@ -16,12 +16,19 @@ export const site = {
   resume: "/pdf/24_25_resume.pdf",
 };
 
-export const intro = [
-  "I design and build web and mobile applications. I care most about the parts people actually feel — accessibility, clear hierarchy, and details that hold up under a close look — because the experience is what people take away from the work.",
-  "Right now I'm a junior developer at Linque and the founder of Impossible Solutions, a software studio in Philadelphia.",
-];
-
 export type Link = { label: string; href: string };
+
+// Each paragraph is a list of text and link segments.
+export const intro: (string | Link)[][] = [
+  [
+    "I design and build web and mobile applications. I care most about the parts people actually feel — accessibility, clear hierarchy, and details that hold up under a close look — because the experience is what people take away from the work.",
+  ],
+  [
+    "Right now I'm a junior developer at ",
+    { label: "Linque", href: "https://www.linque.com/" },
+    " and the founder of Impossible Solutions, a software studio in Philadelphia.",
+  ],
+];
 
 export const profiles: Link[] = [
   { label: "GitHub", href: "https://github.com/gabeferreiraa" },
@@ -30,6 +37,8 @@ export const profiles: Link[] = [
 
 export type Role = {
   role: string;
+  // Current roles are listed as worksFor in the JSON-LD
+  current?: boolean;
   org: string;
   href: string;
   description?: string;
@@ -39,13 +48,21 @@ export type Role = {
 export const experience: Role[] = [
   {
     role: "Junior Developer · Current",
+    current: true,
     org: "Linque",
     href: "https://www.linque.com/",
     description:
-      "I started with a six-month co-op at Proconex in 2025 and stayed on as Proconex became Linque, an industrial intelligence company connecting IT, OT and AI systems.",
+      "An industrial intelligence company connecting IT, OT and AI systems. Formerly Proconex — I stayed on after my co-op when the company became Linque.",
+  },
+  {
+    role: "Co-op · 2025",
+    org: "Proconex",
+    href: "https://www.proconexdirect.com",
+    description: "A six-month co-op developing software, before Proconex became Linque.",
   },
   {
     role: "Founder",
+    current: true,
     org: "Impossible Solutions",
     href: "https://impossiblesolutions.studio",
     description:

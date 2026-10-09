@@ -26,8 +26,18 @@ function Home() {
 
         <main id="content" tabIndex={-1}>
           <div className="mt-8 space-y-4">
-            {intro.map((p) => (
-              <p key={p}>{p}</p>
+            {intro.map((parts, i) => (
+              <p key={i}>
+                {parts.map((part, j) =>
+                  typeof part === "string" ? (
+                    part
+                  ) : (
+                    <External key={j} href={part.href}>
+                      {part.label}
+                    </External>
+                  ),
+                )}
+              </p>
             ))}
           </div>
 
