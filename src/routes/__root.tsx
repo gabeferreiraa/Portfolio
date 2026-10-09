@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { HeadContent, Outlet, Scripts, createRootRoute } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
 import { experience, profiles, site } from "../content";
+import { themeInitScript } from "../components/ThemeToggle";
 
 const personJsonLd = {
   "@context": "https://schema.org",
@@ -55,8 +56,10 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en">
+    // The init script may set data-theme before hydration
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <HeadContent />
         {/* Written directly: head() dedupes metas that share a name */}
         <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fafaf9" />

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { ContactForm } from "../components/ContactForm";
+import { ThemeToggle } from "../components/ThemeToggle";
 import { company, experience, intro, profiles, projects, site } from "../content";
 
 export const Route = createFileRoute("/")({
@@ -18,7 +19,10 @@ function Home() {
 
       <div className="mx-auto max-w-[680px] px-5 pt-16 pb-12 sm:px-6 sm:pt-24 md:pt-32">
         <header>
-          <h1 className="text-[1.75rem] leading-tight font-medium tracking-tight sm:text-[2rem]">{site.name}</h1>
+          <div className="flex items-start justify-between gap-4">
+            <h1 className="text-[1.75rem] leading-tight font-medium tracking-tight sm:text-[2rem]">{site.name}</h1>
+            <ThemeToggle />
+          </div>
           <p className="mt-1 text-muted">{`${site.role} in ${site.location}`}</p>
         </header>
 

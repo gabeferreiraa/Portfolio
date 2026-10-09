@@ -10,29 +10,45 @@
     U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-/* Contrast on bg: fg 15.2:1, muted 5.7:1, field 3.3:1 (AA) */
+/* Theme: follows the OS until the visitor picks one; the toggle sets
+   <html data-theme="light|dark"> (persisted in localStorage). */
+
+/* Light — contrast on bg: fg 15.2:1, muted 5.7:1, field 3.3:1 (AA) */
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
   --bg: #fafaf9;
   --fg: #222222;
   --muted: #646464;
-  --field: #8a8a8a; /* 3.3:1 — WCAG 1.4.11 non-text contrast */
+  --field: #8a8a8a; /* WCAG 1.4.11 non-text contrast */
   --underline: #a8a8a6;
   --error: #b42318;
   --focus: #222222;
 }
 
+/* Dark — fg 15.5:1, muted 7.2:1, field 3.4:1. Duplicated so it applies both
+   from the OS preference and from an explicit choice. */
 @media (prefers-color-scheme: dark) {
-  :root {
-    /* fg 15.5:1, muted 7.2:1, field 3.4:1 */
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
     --bg: #161616;
     --fg: #ededed;
     --muted: #a3a3a3;
-    --field: #6a6a6a; /* 3.3:1 */
+    --field: #6a6a6a;
     --underline: #5e5e5e;
     --error: #ff8a80;
     --focus: #ededed;
   }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #161616;
+  --fg: #ededed;
+  --muted: #a3a3a3;
+  --field: #6a6a6a;
+  --underline: #5e5e5e;
+  --error: #ff8a80;
+  --focus: #ededed;
 }
 
 @theme inline {
