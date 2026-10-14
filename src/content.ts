@@ -13,7 +13,7 @@ export const site = {
     "Gabriel Ferreira is a UI/UX developer in Philadelphia — a junior developer at Linque and the founder of Impossible Solutions, a software studio building websites and mobile apps.",
   email: "gferreira0404@gmail.com",
   // Replace the file in /public/pdf (or change this path) to update the resume.
-  resume: "/pdf/24_25_resume.pdf",
+  resume: "/pdf/Resume-2026.pdf",
 };
 
 export type Link = { label: string; href: string };
@@ -27,14 +27,20 @@ export const intro: (string | Link)[][] = [
     "Right now I'm a junior developer at ",
     { label: "Linque", href: "https://www.linque.com/" },
     " and the founder of ",
-    { label: "Impossible Solutions", href: "https://impossiblesolutions.studio" },
+    {
+      label: "Impossible Solutions",
+      href: "https://impossiblesolutions.studio",
+    },
     ", a software studio in Philadelphia.",
   ],
 ];
 
 export const profiles: Link[] = [
   { label: "GitHub", href: "https://github.com/gabeferreiraa" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/gabriel-ferreira-544b95251/" },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/gabriel-ferreira-544b95251/",
+  },
 ];
 
 export type Role = {
@@ -57,10 +63,11 @@ export const experience: Role[] = [
       "An industrial intelligence company connecting IT, OT and AI systems.",
   },
   {
-    role: "Co-op · 2025",
+    role: "Co-op · 2025-2026",
     org: "Proconex",
     href: "https://www.proconexdirect.com",
-    description: "A six-month co-op building software for the industrial automation and process control industry.",
+    description:
+      "A six-month co-op building software for the industrial automation and process control industry.",
   },
   {
     role: "Founder",
@@ -82,6 +89,13 @@ export type Project = {
 
 // Ordered by significance.
 export const projects: Project[] = [
+  {
+    title: "Out&Abt",
+    description:
+      "A mobile app for finding restaurants, desserts, activities and spots worth going to near you. Designed in Figma and built as my Senior-year project.",
+    meta: "Mobile app · React Native, Expo · 2025–Current",
+    href: "https://www.outnabt.app/",
+  },
   {
     title: "Moonrise",
     description:
@@ -105,15 +119,9 @@ export const projects: Project[] = [
   },
   {
     title: "Drexel EGS",
-    description: "A custom WordPress site for Drexel University's Entrepreneurial Game Studio.",
+    description:
+      "A custom WordPress site for Drexel University's Entrepreneurial Game Studio.",
     meta: "Website · WordPress, Elementor · 2024",
     href: "https://egs.drexel.edu/",
-  },
-  {
-    title: "Out&Abt",
-    description:
-      "A mobile app for finding restaurants, desserts, activities and spots worth going to near you. Designed in Figma and built as my junior-year project.",
-    meta: "Mobile app · React Native, Expo · 2025–2026",
-    href: "https://outandabt-web.vercel.app/",
   },
 ];
