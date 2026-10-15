@@ -21,7 +21,7 @@ export type Link = { label: string; href: string };
 // Each paragraph is a list of text and link segments.
 export const intro: (string | Link)[][] = [
   [
-    "I design and build web and mobile applications. I care most about the parts people actually feel — accessibility, clear hierarchy, and details that hold up under a close look — because the experience is what people take away from the work.",
+    "I specialize in the development of web and mobile applications. I know what it takes to bring an idea to reality while prioritizing the user experience. Accessibility, clear hierarchy, and details that can't be missed are what make the difference.",
   ],
   [
     "Right now I'm a junior developer at ",
@@ -97,13 +97,6 @@ export const projects: Project[] = [
     href: "https://www.outnabt.app/",
   },
   {
-    title: "Moonrise",
-    description:
-      "An iOS meditation app made with five-time Grammy-winning artist Jeff Bhasker, pairing guided sessions and Dolby Atmos audio with real-time moon phase tracking.",
-    meta: "iOS app · React Native, Expo, Firebase · 2025–2026",
-    href: "https://moonrise-web.vercel.app/",
-  },
-  {
     title: "Mix with Taner",
     description:
       "A music portfolio showcasing 50+ projects and 2.5M+ streams, with Spotify integration and CMS-managed content.",
@@ -116,6 +109,13 @@ export const projects: Project[] = [
       "A corporate website for an insurance provider, built on a headless CMS so the team can manage content and SEO themselves.",
     meta: "Website · TanStack Start, Sanity · 2025–2026",
     href: "https://remcoinsuranceservices.com/",
+  },
+  {
+    title: "Moonrise",
+    description:
+      "An iOS meditation app made with five-time Grammy-winning artist Jeff Bhasker, pairing guided sessions and Dolby Atmos audio with real-time moon phase tracking.",
+    meta: "iOS app · React Native, Expo, Firebase · 2025–2026",
+    href: "https://moonrise-web.vercel.app/",
   },
   {
     title: "Drexel EGS",
