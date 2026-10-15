@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { ContactForm } from "../components/ContactForm";
+import { DayCountdown } from "../components/DayCountdown";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { experience, intro, profiles, projects, site } from "../content";
 
@@ -93,6 +94,7 @@ function Home() {
           <p>{`© ${new Date().getFullYear()} ${site.name}`}</p>
           <a href={`mailto:${site.email}`}>{site.email}</a>
           <a href={site.phoneHref}>{site.phone}</a>
+          <DayCountdown className="basis-full" />
         </footer>
       </div>
     </>
