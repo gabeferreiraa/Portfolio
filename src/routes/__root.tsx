@@ -16,6 +16,21 @@ const personJsonLd = {
   sameAs: profiles.map((p) => p.href),
 };
 
+// Easter egg for anyone who opens View Source or the devtools console.
+// Lives in an inline script (not a JSX comment) so it survives the production build.
+const helloScript = `/*
+  Olá! 👋 Thanks for peeking under the hood.
+
+  A few things about me:
+   - I'm bilingual: I speak English and Portuguese (português)
+   - I study at Drexel University in Philadelphia
+   - Come summer, you'll find me grilling picanha
+
+  Reaching out through the contact form? Tell me your favorite album. 🎶
+*/
+console.log("%cOlá! 👋", "font-size:20px;font-weight:600");
+console.log("Thanks for poking around. Writing to me through the contact form? Include your favorite album. 🎶");`;
+
 export const Route = createRootRoute({
   head: () => ({
     meta: [
@@ -59,6 +74,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
     // The init script may set data-theme before hydration
     <html lang="en" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: helloScript }} />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <HeadContent />
         {/* Written directly: head() dedupes metas that share a name */}

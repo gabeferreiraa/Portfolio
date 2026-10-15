@@ -6,3 +6,9 @@ GitHub: https://github.com/gabeferreiraa
 /* SITE */
 Built with: TanStack Start, React, Tailwind CSS
 Font: Inter (SIL Open Font License)
+
+/* FUN FACTS */
+Languages: English, Portuguese (bilingual)
+School: Drexel University
+Summer: grilling picanha
+P.S. Writing to me through the contact form? Include your favorite album.
