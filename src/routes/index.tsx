@@ -89,8 +89,10 @@ function Home() {
           </Section>
         </main>
 
-        <footer className="mt-20 text-sm text-muted">
+        <footer className="mt-20 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
           <p>{`© ${new Date().getFullYear()} ${site.name}`}</p>
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+          <a href={site.phoneHref}>{site.phone}</a>
         </footer>
       </div>
     </>

@@ -12,6 +12,9 @@ export const site = {
   description:
     "Gabriel Ferreira is a UI/UX developer in Philadelphia — a junior developer at Linque and the founder of Impossible Solutions, a software studio building websites and mobile apps.",
   email: "gferreira0404@gmail.com",
+  phone: "(609) 351-7981",
+  // E.164 form for the tel: link.
+  phoneHref: "tel:+16093517981",
   // Replace the file in /public/pdf (or change this path) to update the resume.
   resume: "/pdf/Resume-2026.pdf",
 };
