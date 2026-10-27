@@ -18,7 +18,7 @@ export type IntroId = keyof typeof intros;
 // Shown under my name in every mode.
 export const profile = {
   name: site.name,
-  positioning: "Developer · User Experience and Interaction Design",
+  positioning: "Developer · UXID",
   school: "Drexel University",
   // Shown as "Graduating …"; after it passes, change the wording in routes/tap.tsx and tap/vcard.ts
   graduation: "June 2027",
