@@ -58,6 +58,7 @@
   --color-muted: var(--muted);
   --color-field: var(--field);
   --color-error: var(--error);
+  --color-line: var(--underline);
 }
 
 html {
@@ -137,8 +138,214 @@ a:hover {
   }
 }
 
+/* ---------- /meet-me ----------
+   The intro is CSS-only so it plays from the prerendered HTML before JS loads.
+   Timeline: dots meet (0.1–0.65s) → ring pulse → overlay fades (1.0s) →
+   content rises in order (0.95–2.7s). Keep INTRO_MS in routes/meet-me.tsx in sync. */
+
+@keyframes mm-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.625rem);
+    filter: blur(4px);
+  }
+}
+
+@keyframes mm-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes mm-overlay-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes mm-approach-a {
+  from {
+    translate: -2rem 0;
+  }
+}
+
+@keyframes mm-approach-b {
+  from {
+    translate: 2rem 0;
+  }
+}
+
+@keyframes mm-bump {
+  40% {
+    scale: 1.45;
+  }
+}
+
+@keyframes mm-ring {
+  from {
+    opacity: 0.45;
+    scale: 1;
+  }
+  to {
+    opacity: 0;
+    scale: 7;
+  }
+}
+
+.mm-reveal {
+  animation: mm-rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.mm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  background: var(--bg);
+  pointer-events: none;
+  animation: mm-overlay-out 0.35s ease 1s both;
+}
+
+.mm-mark {
+  position: relative;
+  width: 5rem;
+  height: 1.5rem;
+}
+
+.mm-dot,
+.mm-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.625rem;
+  height: 0.625rem;
+  margin: -0.3125rem 0 0 -0.3125rem;
+  border-radius: 9999px;
+}
+
+.mm-dot {
+  background: var(--fg);
+}
+
+/* Accelerates into contact, like two things drawn together */
+.mm-dot-a {
+  animation:
+    mm-approach-a 0.55s cubic-bezier(0.55, 0, 0.25, 1) 0.1s both,
+    mm-bump 0.3s ease-out 0.62s;
+}
+
+.mm-dot-b {
+  animation: mm-approach-b 0.55s cubic-bezier(0.55, 0, 0.25, 1) 0.1s both;
+}
+
+.mm-ring {
+  border: 1.5px solid var(--fg);
+  opacity: 0;
+  /* No backwards fill: stays invisible until the dots touch */
+  animation: mm-ring 0.8s cubic-bezier(0.1, 0.6, 0.3, 1) 0.62s;
+}
+
+.mm-overlay-label {
+  margin: 0;
+  animation: mm-fade-in 0.3s ease 0.6s both;
+}
+
+/* The global link rule above is unlayered, so it beats Tailwind utilities;
+   these override it for links styled as rows and buttons */
+.mm-plain {
+  text-decoration: none;
+}
+
+.mm-button {
+  color: var(--bg);
+  text-decoration: none;
+}
+
+.mm-status-dot {
+  width: 0.4375rem;
+  height: 0.4375rem;
+  border-radius: 9999px;
+  background: var(--fg);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--fg) 14%, transparent);
+}
+
+.mm-skip {
+  position: fixed;
+  left: 50%;
+  bottom: calc(1.25rem + env(safe-area-inset-bottom));
+  z-index: 30;
+  translate: -50% 0;
+  min-height: 2.75rem;
+  padding: 0 1.125rem;
+  border: 1px solid var(--underline);
+  border-radius: 9999px;
+  background: var(--bg);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    opacity 0.25s ease,
+    visibility 0.25s;
+  animation: mm-fade-in 0.3s ease 0.15s both;
+}
+
+.mm-skip:hover {
+  color: var(--fg);
+}
+
+.mm-arrow {
+  transition: translate 0.2s ease;
+}
+
+.group:hover .mm-arrow-down {
+  translate: 0 0.1875rem;
+}
+
+.group:hover .mm-arrow-out {
+  translate: 0.125rem -0.125rem;
+}
+
+.mm-details[open] .mm-details-body {
+  animation: mm-rise 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* Finished or skipped: everything in its final state */
+.mm-root[data-intro="done"] .mm-reveal {
+  animation: none;
+}
+
+.mm-root[data-intro="done"] .mm-overlay {
+  display: none;
+}
+
+.mm-root[data-intro="done"] .mm-skip {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* No intro at all; the page simply appears */
+@media (prefers-reduced-motion: reduce) {
+  .mm-reveal,
+  .mm-details[open] .mm-details-body {
+    animation: none;
+  }
+  .mm-overlay,
+  .mm-skip {
+    display: none;
+  }
+}
+
 @media print {
   .skip-link,
+  .mm-overlay,
+  .mm-skip,
   form {
     display: none !important;
   }

@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { ContactForm } from "../components/ContactForm";
 import { DayCountdown } from "../components/DayCountdown";
+import { External } from "../components/External";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { experience, intro, profiles, projects, site } from "../content";
 
@@ -109,17 +110,5 @@ function Section({ id, title, children }: { id: string; title: string; children:
       </h2>
       {children}
     </section>
-  );
-}
-
-function External({ href, className, children }: { href: string; className?: string; children: ReactNode }) {
-  return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
-      {children}
-      <span aria-hidden="true" className="ml-0.5 inline-block text-[0.85em] text-muted">
-        ↗
-      </span>
-      <span className="sr-only"> (opens in a new tab)</span>
-    </a>
   );
 }

@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as GabrielFerreiraDotvcfRouteImport } from './routes/gabriel-ferreira[.]vcf'
+import { Route as MeetMeRouteImport } from './routes/meet-me'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GabrielFerreiraDotvcfRoute = GabrielFerreiraDotvcfRouteImport.update({
+  id: '/gabriel-ferreira.vcf',
+  path: '/gabriel-ferreira.vcf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeetMeRoute = MeetMeRouteImport.update({
+  id: '/meet-me',
+  path: '/meet-me',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/gabriel-ferreira.vcf': typeof GabrielFerreiraDotvcfRoute
+  '/meet-me': typeof MeetMeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/gabriel-ferreira.vcf': typeof GabrielFerreiraDotvcfRoute
+  '/meet-me': typeof MeetMeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/gabriel-ferreira.vcf': typeof GabrielFerreiraDotvcfRoute
+  '/meet-me': typeof MeetMeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/gabriel-ferreira.vcf' | '/meet-me'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/gabriel-ferreira.vcf' | '/meet-me'
+  id: '__root__' | '/' | '/gabriel-ferreira.vcf' | '/meet-me'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  GabrielFerreiraDotvcfRoute: typeof GabrielFerreiraDotvcfRoute
+  MeetMeRoute: typeof MeetMeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/gabriel-ferreira.vcf': {
+      id: '/gabriel-ferreira.vcf'
+      path: '/gabriel-ferreira.vcf'
+      fullPath: '/gabriel-ferreira.vcf'
+      preLoaderRoute: typeof GabrielFerreiraDotvcfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meet-me': {
+      id: '/meet-me'
+      path: '/meet-me'
+      fullPath: '/meet-me'
+      preLoaderRoute: typeof MeetMeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  GabrielFerreiraDotvcfRoute: GabrielFerreiraDotvcfRoute,
+  MeetMeRoute: MeetMeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
