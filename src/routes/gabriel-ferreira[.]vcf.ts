@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { buildVCard } from "../meet-me/vcard";
+import { buildVCard } from "../tap/vcard";
 
-// Contact card for /meet-me. Server-only (no component), so it isn't prerendered
+// Contact card for /tap. Server-only (no component), so it isn't prerendered
 // and always reflects src/content.ts.
 export const Route = createFileRoute("/gabriel-ferreira.vcf")({
   server: {

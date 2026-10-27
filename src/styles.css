@@ -138,12 +138,21 @@ a:hover {
   }
 }
 
-/* ---------- /meet-me ----------
-   The intro is CSS-only so it plays from the prerendered HTML before JS loads.
-   Timeline: dots meet (0.15–0.9s) → ring pulse → "Connected" holds →
-   overlay fades (1.45s) → content rises in order (1.4–3.45s). Keep INTRO_MS in routes/meet-me.tsx in sync. */
+/* ---------- /tap ----------
+   The handshake is CSS-only so it plays from the prerendered HTML before JS loads.
+   Every time is multiplied by --tempo (introTempo in src/tap/config.ts).
+     0–0.48s      attraction: the dots ease apart a hair, then accelerate into contact
+     0.48–0.8s    snap: the merged dot squashes and rebounds, with a brief glow
+     0.5–1.47s    two ripples spread from the contact point
+     0.82–1.15s   the backdrop fades; 0.9–1.35s the dot flies into the header's mark
+     0.95–2.35s   content rises in reading order
+   If the last reveal moves, update INTRO_MS in routes/tap.tsx. */
 
-@keyframes mm-rise {
+.tap-root {
+  --tempo: 1;
+}
+
+@keyframes tap-rise {
   from {
     opacity: 0;
     transform: translateY(0.625rem);
@@ -151,130 +160,230 @@ a:hover {
   }
 }
 
-@keyframes mm-fade-in {
+@keyframes tap-fade-in {
   from {
     opacity: 0;
   }
 }
 
-@keyframes mm-overlay-out {
+@keyframes tap-fade-out {
   to {
     opacity: 0;
     visibility: hidden;
   }
 }
 
-@keyframes mm-approach-a {
-  from {
-    translate: -2rem 0;
+@keyframes tap-vanish {
+  to {
+    visibility: hidden;
   }
 }
 
-@keyframes mm-approach-b {
-  from {
-    translate: 2rem 0;
+/* --side is -1 (left dot) or 1 (right dot). A small outward drift (anticipation),
+   then an ease-in that is still accelerating at contact — attraction, not travel. */
+@keyframes tap-attract {
+  0% {
+    translate: calc(var(--side) * 1.75rem) 0;
+    scale: 0.6;
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.3, 0, 0.4, 1);
+  }
+  22% {
+    translate: calc(var(--side) * 2.125rem) 0;
+    scale: 1;
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.6, 0, 0.95, 0.5);
+  }
+  100% {
+    translate: calc(var(--side) * 0.3125rem) 0;
+    scale: 1;
+    opacity: 1;
   }
 }
 
-@keyframes mm-bump {
-  40% {
-    scale: 1.45;
+/* Starts as wide as the two touching dots, compresses, rebounds, settles */
+@keyframes tap-snap {
+  0% {
+    opacity: 1;
+    scale: 1.75 0.75;
+    animation-timing-function: cubic-bezier(0.25, 0, 0.3, 1);
   }
-}
-
-@keyframes mm-ring {
-  from {
-    opacity: 0.45;
+  38% {
+    scale: 0.86 1.14;
+    animation-timing-function: ease-in-out;
+  }
+  68% {
+    scale: 1.05 0.96;
+    animation-timing-function: ease-in-out;
+  }
+  100% {
+    opacity: 1;
     scale: 1;
   }
-  to {
+}
+
+@keyframes tap-flash {
+  0% {
     opacity: 0;
-    scale: 7;
+    scale: 0.4;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    scale: 1.5;
   }
 }
 
-.mm-reveal {
-  animation: mm-rise 0.65s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+/* Drawn at full size with a 1px border and scaled up from a point, so the stroke
+   sharpens as the wave travels instead of thickening */
+@keyframes tap-ripple {
+  0% {
+    opacity: 0;
+    scale: var(--from);
+  }
+  12% {
+    opacity: var(--peak);
+  }
+  100% {
+    opacity: 0;
+    scale: 1;
+  }
 }
 
-.mm-overlay {
+/* --dock-* are measured in routes/tap.tsx; without JS the dot shrinks away in place */
+@keyframes tap-dock-x {
+  to {
+    translate: var(--dock-x, 0) 0;
+  }
+}
+
+@keyframes tap-dock-y {
+  to {
+    translate: 0 var(--dock-y, 0);
+    scale: var(--dock-scale, 0);
+  }
+}
+
+.tap-reveal {
+  animation: tap-rise calc(0.55s * var(--tempo)) cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.tap-fade {
+  animation: tap-fade-in calc(0.3s * var(--tempo)) ease both;
+}
+
+.tap-overlay {
   position: fixed;
   inset: 0;
   z-index: 20;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1.25rem;
-  background: var(--bg);
+  display: grid;
+  place-items: center;
   pointer-events: none;
-  animation: mm-overlay-out 0.45s ease 1.45s both;
+  animation: tap-vanish 0s calc(1.47s * var(--tempo)) forwards;
 }
 
-.mm-mark {
-  position: relative;
-  width: 5rem;
-  height: 1.5rem;
-}
-
-.mm-dot,
-.mm-ring {
+.tap-veil {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0.625rem;
-  height: 0.625rem;
-  margin: -0.3125rem 0 0 -0.3125rem;
+  inset: 0;
+  background: var(--bg);
+  animation: tap-fade-out calc(0.33s * var(--tempo)) ease calc(0.82s * var(--tempo)) both;
+}
+
+/* A point at the viewport's center; everything below is centered on it */
+.tap-mark {
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+.tap-mark span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--size);
+  height: var(--size);
+  margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
   border-radius: 9999px;
 }
 
-.mm-dot {
+.tap-dock-y,
+.tap-core {
+  /* Nested inside the x mover: re-center on its middle */
+  top: 50% !important;
+  left: 50% !important;
+}
+
+.tap-dot,
+.tap-core {
   background: var(--fg);
+  box-shadow: 0 0 0.75rem color-mix(in srgb, var(--fg) 28%, transparent);
 }
 
-/* Accelerates into contact, like two things drawn together */
-.mm-dot-a {
+.tap-dot {
+  --size: 0.625rem;
   animation:
-    mm-approach-a 0.75s cubic-bezier(0.55, 0, 0.25, 1) 0.15s both,
-    mm-bump 0.35s ease-out 0.88s;
+    tap-attract calc(0.48s * var(--tempo)) linear both,
+    tap-vanish 0s calc(0.48s * var(--tempo)) forwards;
 }
 
-.mm-dot-b {
-  animation: mm-approach-b 0.75s cubic-bezier(0.55, 0, 0.25, 1) 0.15s both;
+.tap-dock-x,
+.tap-dock-y,
+.tap-core {
+  --size: 0.75rem;
 }
 
-.mm-ring {
-  border: 1.5px solid var(--fg);
+.tap-dock-x {
+  animation: tap-dock-x calc(0.45s * var(--tempo)) cubic-bezier(0.5, 0, 0.2, 1) calc(0.9s * var(--tempo)) forwards;
+}
+
+.tap-dock-y {
+  animation: tap-dock-y calc(0.45s * var(--tempo)) cubic-bezier(0.7, 0, 0.1, 1) calc(0.9s * var(--tempo)) forwards;
+}
+
+.tap-core {
   opacity: 0;
-  /* No backwards fill: stays invisible until the dots touch */
-  animation: mm-ring 1s cubic-bezier(0.1, 0.6, 0.3, 1) 0.88s;
+  animation: tap-snap calc(0.32s * var(--tempo)) linear calc(0.48s * var(--tempo)) forwards;
 }
 
-.mm-overlay-label {
-  margin: 0;
-  animation: mm-fade-in 0.35s ease 0.85s both;
+.tap-flash {
+  --size: 3.5rem;
+  opacity: 0;
+  background: radial-gradient(circle, color-mix(in srgb, var(--fg) 22%, transparent), transparent 70%);
+  animation: tap-flash calc(0.45s * var(--tempo)) ease-out calc(0.48s * var(--tempo));
 }
 
-/* The global link rule above is unlayered, so it beats Tailwind utilities;
-   these override it for links styled as rows and buttons */
-.mm-plain {
-  text-decoration: none;
+.tap-ripple {
+  border: 1px solid var(--fg);
+  opacity: 0;
 }
 
-.mm-button {
-  color: var(--bg);
-  text-decoration: none;
+.tap-ripple-1 {
+  --size: 11rem;
+  --from: 0.07;
+  --peak: 0.5;
+  animation: tap-ripple calc(0.65s * var(--tempo)) cubic-bezier(0.15, 0.6, 0.35, 1) calc(0.5s * var(--tempo));
 }
 
-.mm-status-dot {
+.tap-ripple-2 {
+  --size: 17rem;
+  --from: 0.045;
+  --peak: 0.22;
+  animation: tap-ripple calc(0.85s * var(--tempo)) cubic-bezier(0.15, 0.6, 0.35, 1) calc(0.62s * var(--tempo));
+}
+
+/* Appears the moment the flying dot lands on it */
+.tap-status-dot {
   width: 0.4375rem;
   height: 0.4375rem;
   border-radius: 9999px;
   background: var(--fg);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--fg) 14%, transparent);
+  animation: tap-fade-in calc(0.12s * var(--tempo)) linear calc(1.33s * var(--tempo)) both;
 }
 
-.mm-skip {
+.tap-skip {
   position: fixed;
   left: 50%;
   bottom: calc(1.25rem + env(safe-area-inset-bottom));
@@ -289,63 +398,128 @@ a:hover {
   font: inherit;
   font-size: 0.875rem;
   cursor: pointer;
-  transition:
-    color 0.15s ease,
-    opacity 0.25s ease,
-    visibility 0.25s;
-  animation: mm-fade-in 0.3s ease 0.15s both;
+  animation: tap-fade-in 0.3s ease 0.15s both;
 }
 
-.mm-skip:hover {
+.tap-skip:hover {
   color: var(--fg);
 }
 
-.mm-arrow {
+/* Press feedback: sinks quickly, springs back with a hint of overshoot.
+   Never delays navigation — the press is purely visual. */
+.tap-press {
+  transition:
+    scale 0.3s cubic-bezier(0.2, 1.6, 0.4, 1),
+    color 0.15s ease,
+    opacity 0.15s ease,
+    visibility 0.25s;
+}
+
+.tap-press:active {
+  scale: 0.975;
+  transition-duration: 0.08s;
+  transition-timing-function: ease-out;
+}
+
+/* The global link rule above is unlayered, so it beats Tailwind utilities;
+   these override it for links styled as rows and buttons */
+.tap-plain {
+  text-decoration: none;
+}
+
+.tap-button {
+  color: var(--bg);
+  text-decoration: none;
+}
+
+.tap-quiet {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.tap-quiet:hover {
+  color: var(--fg);
+}
+
+.tap-arrow {
   transition: translate 0.2s ease;
 }
 
-.group:hover .mm-arrow-down {
+.group:hover .tap-arrow-down {
   translate: 0 0.1875rem;
 }
 
-.group:hover .mm-arrow-out {
+.group:hover .tap-arrow-out {
   translate: 0.125rem -0.125rem;
 }
 
-.mm-details[open] .mm-details-body {
-  animation: mm-rise 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+.tap-quiet:hover .tap-arrow {
+  translate: 0.1875rem 0;
 }
 
-/* Finished or skipped: everything in its final state */
-.mm-root[data-intro="done"] .mm-reveal {
+@keyframes tap-drop-kf {
+  40% {
+    translate: 0 0.25rem;
+  }
+}
+
+.tap-drop {
+  animation: tap-drop-kf 0.35s cubic-bezier(0.3, 0, 0.3, 1);
+}
+
+@keyframes tap-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.tap-check path {
+  stroke-dasharray: 16;
+  stroke-dashoffset: 16;
+  animation: tap-draw 0.3s ease-out 0.05s forwards;
+}
+
+.tap-details[open] .tap-details-body {
+  animation: tap-rise 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* Finished, skipped, or already seen this visit: everything in its final state */
+:is(.tap-root[data-intro="done"], :root[data-tap-seen] .tap-root) :is(.tap-reveal, .tap-fade, .tap-status-dot) {
   animation: none;
 }
 
-.mm-root[data-intro="done"] .mm-overlay {
+:is(.tap-root[data-intro="done"], :root[data-tap-seen] .tap-root) .tap-overlay {
   display: none;
 }
 
-.mm-root[data-intro="done"] .mm-skip {
+:is(.tap-root[data-intro="done"], :root[data-tap-seen] .tap-root) .tap-skip {
   opacity: 0;
   visibility: hidden;
 }
 
-/* No intro at all; the page simply appears */
+/* No convergence or ripples: the page is simply there, already connected */
 @media (prefers-reduced-motion: reduce) {
-  .mm-reveal,
-  .mm-details[open] .mm-details-body {
+  .tap-reveal,
+  .tap-fade,
+  .tap-status-dot,
+  .tap-drop,
+  .tap-details[open] .tap-details-body {
     animation: none;
   }
-  .mm-overlay,
-  .mm-skip {
+  .tap-check path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .tap-overlay,
+  .tap-skip {
     display: none;
   }
 }
 
 @media print {
   .skip-link,
-  .mm-overlay,
-  .mm-skip,
+  .tap-overlay,
+  .tap-skip,
   form {
     display: none !important;
   }

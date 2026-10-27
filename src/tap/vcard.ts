@@ -23,7 +23,7 @@ export function buildVCard() {
     `URL:${site.url}`,
     // itemN groups give each link a readable label in Apple Contacts
     ...profiles.flatMap((p, i) => [`item${i + 1}.URL:${p.href}`, `item${i + 1}.X-ABLabel:${esc(p.label)}`]),
-    `NOTE:${esc(`${profile.school}, graduating ${profile.graduation}. Saved from ${site.url.replace(/^https?:\/\//, "")}/meet-me`)}`,
+    `NOTE:${esc(`${profile.school}, graduating ${profile.graduation}. Saved from ${site.url.replace(/^https?:\/\//, "")}/tap`)}`,
     "END:VCARD",
   ];
   return lines.join("\r\n") + "\r\n";

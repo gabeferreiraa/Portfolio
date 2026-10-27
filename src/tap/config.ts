@@ -1,4 +1,4 @@
-// Copy and settings for /meet-me — the page my NFC sticker opens.
+// Copy and settings for /tap — the page my NFC sticker opens.
 // The sticker always points to the same URL; what the page says is decided here.
 
 import { projects, site, type Project } from "../content";
@@ -32,7 +32,7 @@ export const profile = {
   name: site.name,
   positioning: "Developer · UX & Interaction Design",
   school: "Drexel University",
-  // Shown as "Graduating …"; after it passes, change the wording in routes/meet-me.tsx and meet-me/vcard.ts
+  // Shown as "Graduating …"; after it passes, change the wording in routes/tap.tsx and tap/vcard.ts
   graduation: "June 2027",
 };
 
@@ -48,8 +48,6 @@ export type Mode = {
   supporting?: string;
   // Project titles from src/content.ts, in display order
   featured: string[];
-  // Tools shown under the projects. Keep to things the projects actually use.
-  skills: string[];
   cta: {
     work: string;
     resume: string;
@@ -61,7 +59,6 @@ export const modes = {
   general: {
     intro: "A",
     featured: ["Out&Abt", "Moonrise", "Mix with Taner", "Remco Insurance"],
-    skills: ["React Native", "Expo", "TanStack Start", "Sanity", "Firebase", "Figma"],
     cta: {
       work: "Explore my work",
       resume: "View my resume",
@@ -73,6 +70,10 @@ export const modes = {
 export type ModeId = keyof typeof modes;
 
 export const ACTIVE_MODE: ModeId = "general";
+
+// Speed of the opening handshake: 1 is the designed ~1.4s connection
+// (~2.35s until everything has settled). 1.25 is 25% slower, 0.8 faster.
+export const introTempo = 1;
 
 // "Why the NFC?" disclosure
 export const whyNfc = [
@@ -91,16 +92,15 @@ function resolve(id: ModeId) {
   const featured = mode.featured.map((title) => {
     const project = projects.find((p) => p.title === title);
     // Fails the build rather than silently dropping a project after a rename
-    if (!project) throw new Error(`meet-me: no project titled "${title}" in src/content.ts`);
+    if (!project) throw new Error(`tap: no project titled "${title}" in src/content.ts`);
     return project;
   });
   return {
     headline: intro.headline,
     supporting: mode.supporting ?? intro.supporting,
     featured: featured satisfies Project[],
-    skills: mode.skills,
     cta: mode.cta,
   };
 }
 
-export const meetMe = resolve(ACTIVE_MODE);
+export const tapPage = resolve(ACTIVE_MODE);

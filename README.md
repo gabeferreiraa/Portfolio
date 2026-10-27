@@ -28,14 +28,15 @@ Everything lives in **`src/content.ts`**: name, intro, links, experience, projec
 
 Styles and color tokens are in `src/styles.css`. The theme follows the OS until a visitor uses the toggle (`src/components/ThemeToggle.tsx`), which sets `<html data-theme>` and saves the choice in localStorage. The page markup is `src/routes/index.tsx`; `<head>` metadata and JSON-LD are in `src/routes/__root.tsx`.
 
-## /meet-me (NFC page)
+## /tap (NFC page)
 
-The NFC sticker on my hand opens `https://gabrielferreira.org/meet-me`. It works the same from a QR code or plain link.
+The NFC sticker on my hand opens `https://gabrielferreira.org/tap`. It works the same from a QR code or plain link, and the old `/meet-me` URL redirects there.
 
-- **Copy and settings:** `src/meet-me/config.ts`. Headline options `A`/`B`/`C` live in `intros`. Pick one with the active mode's `intro` field, and edit each option's `supporting` text there too.
-- **Modes:** `modes` holds per-audience content (intro, supporting copy, featured project titles from `src/content.ts`, tools, CTA labels). Add a mode by copying `general` and pointing `ACTIVE_MODE` at it. Changes ship with a deploy, so a page someone already has open never changes under them.
+- **Copy and settings:** `src/tap/config.ts`. Headline options `A`/`B`/`C` live in `intros`. Pick one with the active mode's `intro` field, and edit each option's `supporting` text there too.
+- **Modes:** `modes` holds per-audience content (intro, supporting copy, featured project titles from `src/content.ts`, CTA labels). Add a mode by copying `general` and pointing `ACTIVE_MODE` at it. Changes ship with a deploy, so a page someone already has open never changes under them.
+- **Intro speed:** `introTempo` in the same file scales the whole handshake (1 = designed speed, 1.25 = 25% slower).
+- **Intro animation:** CSS in `src/styles.css` (`.tap-*`), so it starts before JavaScript loads. It's skippable (button or Esc), plays once per browser tab, and is off under reduced motion.
 - **Contact card:** `/gabriel-ferreira.vcf` is generated from `src/content.ts` by `src/routes/gabriel-ferreira[.]vcf.ts`.
-- **Intro animation:** CSS in `src/styles.css` (`.mm-*`). It's skippable (button or Esc) and turned off under reduced motion. If you change its timing, update `INTRO_MS` in `src/routes/meet-me.tsx`.
 
 The page is `noindex`, so search sends people to the homepage instead.
 

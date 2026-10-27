@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GabrielFerreiraDotvcfRouteImport } from './routes/gabriel-ferreira[.]vcf'
 import { Route as MeetMeRouteImport } from './routes/meet-me'
+import { Route as TapRouteImport } from './routes/tap'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +29,44 @@ const MeetMeRoute = MeetMeRouteImport.update({
   path: '/meet-me',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TapRoute = TapRouteImport.update({
+  id: '/tap',
+  path: '/tap',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/gabriel-ferreira.vcf': typeof GabrielFerreiraDotvcfRoute
   '/meet-me': typeof MeetMeRoute
+  '/tap': typeof TapRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/gabriel-ferreira.vcf': typeof GabrielFerreiraDotvcfRoute
   '/meet-me': typeof MeetMeRoute
+  '/tap': typeof TapRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/gabriel-ferreira.vcf': typeof GabrielFerreiraDotvcfRoute
   '/meet-me': typeof MeetMeRoute
+  '/tap': typeof TapRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/gabriel-ferreira.vcf' | '/meet-me'
+  fullPaths: '/' | '/gabriel-ferreira.vcf' | '/meet-me' | '/tap'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/gabriel-ferreira.vcf' | '/meet-me'
-  id: '__root__' | '/' | '/gabriel-ferreira.vcf' | '/meet-me'
+  to: '/' | '/gabriel-ferreira.vcf' | '/meet-me' | '/tap'
+  id: '__root__' | '/' | '/gabriel-ferreira.vcf' | '/meet-me' | '/tap'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   GabrielFerreiraDotvcfRoute: typeof GabrielFerreiraDotvcfRoute
   MeetMeRoute: typeof MeetMeRoute
+  TapRoute: typeof TapRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeetMeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tap': {
+      id: '/tap'
+      path: '/tap'
+      fullPath: '/tap'
+      preLoaderRoute: typeof TapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   GabrielFerreiraDotvcfRoute: GabrielFerreiraDotvcfRoute,
   MeetMeRoute: MeetMeRoute,
+  TapRoute: TapRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
