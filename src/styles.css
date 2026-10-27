@@ -141,11 +141,11 @@ a:hover {
 /* ---------- /tap ----------
    The handshake is CSS-only so it plays from the prerendered HTML before JS loads.
    Every time is multiplied by --tempo (introTempo in src/tap/config.ts).
-     0–0.48s      attraction: the dots ease apart a hair, then accelerate into contact
-     0.48–0.8s    snap: the merged dot squashes and rebounds, with a brief glow
-     0.5–1.47s    two ripples spread from the contact point
-     0.82–1.15s   the backdrop fades; 0.9–1.35s the dot flies into the header's mark
-     0.95–2.35s   content rises in reading order
+     0–0.6s       attraction: the dots ease apart a hair, then accelerate into contact
+     0.6–0.9s     snap: the merged dot squashes and rebounds, with a brief glow
+     0.62–1.71s   two ripples spread from the contact point and dissolve
+     1.2–1.6s     the backdrop fades; 1.2–1.75s the dot flies into the header's mark
+     1.35–2.28s   content rises in reading order
    If the last reveal moves, update INTRO_MS in routes/tap.tsx. */
 
 .tap-root {
@@ -267,7 +267,7 @@ a:hover {
 }
 
 .tap-reveal {
-  animation: tap-rise calc(0.55s * var(--tempo)) cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation: tap-rise calc(0.5s * var(--tempo)) cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
 .tap-fade {
@@ -281,14 +281,14 @@ a:hover {
   display: grid;
   place-items: center;
   pointer-events: none;
-  animation: tap-vanish 0s calc(1.47s * var(--tempo)) forwards;
+  animation: tap-vanish 0s calc(1.8s * var(--tempo)) forwards;
 }
 
 .tap-veil {
   position: absolute;
   inset: 0;
   background: var(--bg);
-  animation: tap-fade-out calc(0.33s * var(--tempo)) ease calc(0.82s * var(--tempo)) both;
+  animation: tap-fade-out calc(0.4s * var(--tempo)) ease calc(1.2s * var(--tempo)) both;
 }
 
 /* A point at the viewport's center; everything below is centered on it */
@@ -324,8 +324,8 @@ a:hover {
 .tap-dot {
   --size: 0.625rem;
   animation:
-    tap-attract calc(0.48s * var(--tempo)) linear both,
-    tap-vanish 0s calc(0.48s * var(--tempo)) forwards;
+    tap-attract calc(0.6s * var(--tempo)) linear both,
+    tap-vanish 0s calc(0.6s * var(--tempo)) forwards;
 }
 
 .tap-dock-x,
@@ -335,23 +335,23 @@ a:hover {
 }
 
 .tap-dock-x {
-  animation: tap-dock-x calc(0.45s * var(--tempo)) cubic-bezier(0.5, 0, 0.2, 1) calc(0.9s * var(--tempo)) forwards;
+  animation: tap-dock-x calc(0.55s * var(--tempo)) cubic-bezier(0.5, 0, 0.2, 1) calc(1.2s * var(--tempo)) forwards;
 }
 
 .tap-dock-y {
-  animation: tap-dock-y calc(0.45s * var(--tempo)) cubic-bezier(0.7, 0, 0.1, 1) calc(0.9s * var(--tempo)) forwards;
+  animation: tap-dock-y calc(0.55s * var(--tempo)) cubic-bezier(0.7, 0, 0.1, 1) calc(1.2s * var(--tempo)) forwards;
 }
 
 .tap-core {
   opacity: 0;
-  animation: tap-snap calc(0.32s * var(--tempo)) linear calc(0.48s * var(--tempo)) forwards;
+  animation: tap-snap calc(0.3s * var(--tempo)) linear calc(0.6s * var(--tempo)) forwards;
 }
 
 .tap-flash {
   --size: 3.5rem;
   opacity: 0;
   background: radial-gradient(circle, color-mix(in srgb, var(--fg) 22%, transparent), transparent 70%);
-  animation: tap-flash calc(0.45s * var(--tempo)) ease-out calc(0.48s * var(--tempo));
+  animation: tap-flash calc(0.5s * var(--tempo)) ease-out calc(0.6s * var(--tempo));
 }
 
 .tap-ripple {
@@ -363,14 +363,14 @@ a:hover {
   --size: 11rem;
   --from: 0.07;
   --peak: 0.5;
-  animation: tap-ripple calc(0.65s * var(--tempo)) cubic-bezier(0.15, 0.6, 0.35, 1) calc(0.5s * var(--tempo));
+  animation: tap-ripple calc(0.85s * var(--tempo)) cubic-bezier(0.15, 0.6, 0.35, 1) calc(0.62s * var(--tempo));
 }
 
 .tap-ripple-2 {
   --size: 17rem;
   --from: 0.045;
   --peak: 0.22;
-  animation: tap-ripple calc(0.85s * var(--tempo)) cubic-bezier(0.15, 0.6, 0.35, 1) calc(0.62s * var(--tempo));
+  animation: tap-ripple calc(0.95s * var(--tempo)) cubic-bezier(0.15, 0.6, 0.35, 1) calc(0.76s * var(--tempo));
 }
 
 /* Appears the moment the flying dot lands on it */
@@ -380,7 +380,7 @@ a:hover {
   border-radius: 9999px;
   background: var(--fg);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--fg) 14%, transparent);
-  animation: tap-fade-in calc(0.12s * var(--tempo)) linear calc(1.33s * var(--tempo)) both;
+  animation: tap-fade-in calc(0.12s * var(--tempo)) linear calc(1.73s * var(--tempo)) both;
 }
 
 .tap-skip {
@@ -423,12 +423,15 @@ a:hover {
 
 /* The global link rule above is unlayered, so it beats Tailwind utilities;
    these override it for links styled as rows and buttons */
-.tap-plain {
-  text-decoration: none;
-}
-
-.tap-button {
-  color: var(--bg);
+.tap-row {
+  display: flex;
+  min-height: 3.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
   text-decoration: none;
 }
 
@@ -449,12 +452,12 @@ a:hover {
   translate: 0 0.1875rem;
 }
 
-.group:hover .tap-arrow-out {
-  translate: 0.125rem -0.125rem;
+.group:hover .tap-arrow-right {
+  translate: 0.1875rem 0;
 }
 
-.tap-quiet:hover .tap-arrow {
-  translate: 0.1875rem 0;
+.group:hover .tap-arrow-out {
+  translate: 0.125rem -0.125rem;
 }
 
 @keyframes tap-drop-kf {
@@ -465,22 +468,6 @@ a:hover {
 
 .tap-drop {
   animation: tap-drop-kf 0.35s cubic-bezier(0.3, 0, 0.3, 1);
-}
-
-@keyframes tap-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-.tap-check path {
-  stroke-dasharray: 16;
-  stroke-dashoffset: 16;
-  animation: tap-draw 0.3s ease-out 0.05s forwards;
-}
-
-.tap-details[open] .tap-details-body {
-  animation: tap-rise 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 /* Finished, skipped, or already seen this visit: everything in its final state */
@@ -502,13 +489,8 @@ a:hover {
   .tap-reveal,
   .tap-fade,
   .tap-status-dot,
-  .tap-drop,
-  .tap-details[open] .tap-details-body {
+  .tap-drop {
     animation: none;
-  }
-  .tap-check path {
-    animation: none;
-    stroke-dashoffset: 0;
   }
   .tap-overlay,
   .tap-skip {

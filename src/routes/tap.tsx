@@ -1,12 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { External } from "../components/External";
 import { ThemeToggle } from "../components/ThemeToggle";
-import { profiles, site } from "../content";
-import { introTempo, profile, tapPage, vcardHref, whyNfc } from "../tap/config";
+import { site } from "../content";
+import { introTempo, profile, tapPage, vcardHref } from "../tap/config";
 
 const title = `Meet ${site.name} — ${profile.positioning}`;
-const description = `${site.name} is a developer with a background in UX and Interaction Design from ${profile.school}, graduating ${profile.graduation}. Selected work, resume and contact details.`;
+const description = `${site.name} is a developer with a background in UX and Interaction Design from ${profile.school}, graduating ${profile.graduation}. Work, resume and contact card.`;
 
 // Per-tab memory of the intro: a reload, Back, or returning from another page skips
 // it. sessionStorage ends with the tab, so nothing outlives the visit.
@@ -32,8 +31,8 @@ export const Route = createFileRoute("/tap")({
   component: TapPage,
 });
 
-// Last reveal ends at 1.8s + 0.55s (.tap-reveal in styles.css), scaled by the tempo
-const INTRO_MS = 2350 * introTempo;
+// Last reveal ends at 1.78s + 0.5s (.tap-reveal in styles.css), scaled by the tempo
+const INTRO_MS = 2280 * introTempo;
 
 // Delay before an element's entrance animation, on the same tempo as the CSS
 const at = (seconds: number): CSSProperties => ({ animationDelay: `calc(${seconds}s * var(--tempo))` });
@@ -55,7 +54,8 @@ function rememberIntro() {
 function TapPage() {
   // The intro is pure CSS so it starts before hydration; this state only ends it early
   const [intro, setIntro] = useState<"playing" | "done">("playing");
-  const [cardRequested, setCardRequested] = useState(false);
+  // Counts contact-card taps so the download arrow can drop again each time
+  const [cardTaps, setCardTaps] = useState(0);
   const mainRef = useRef<HTMLElement>(null);
   const markRef = useRef<HTMLDivElement>(null);
   const dockRef = useRef<HTMLSpanElement>(null);
@@ -111,12 +111,8 @@ function TapPage() {
     mainRef.current?.focus();
   }
 
-  const { headline, supporting, featured, cta } = tapPage;
+  const { headline, cta } = tapPage;
   const [lead, ...follow] = headline;
-  const links = [
-    { label: "Phone", value: site.phone, href: site.phoneHref },
-    ...profiles.map((p) => ({ label: p.label, value: p.href.replace(/^https:\/\/(www\.)?/, "").replace(/\/$/, ""), href: p.href })),
-  ];
 
   return (
     <div
@@ -124,7 +120,7 @@ function TapPage() {
       data-intro={intro}
       style={{ "--tempo": introTempo } as CSSProperties}
       onClickCapture={(e) => {
-        const el = (e.target as Element).closest("a, button, summary");
+        const el = (e.target as Element).closest("a, button");
         if (!el) return;
         buzz();
         // Following a link mid-intro shouldn't land on content that's still fading in
@@ -141,8 +137,8 @@ function TapPage() {
         Skip intro
       </button>
 
-      <div className="mx-auto max-w-[760px] px-5 pt-6 pb-10 sm:px-6 sm:pt-10">
-        <header className="tap-fade flex items-center justify-between" style={at(0.95)}>
+      <div className="mx-auto flex min-h-svh max-w-[30rem] flex-col px-6 pt-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+        <header className="tap-fade flex items-center justify-between" style={at(1.35)}>
           <p className="flex items-center gap-2.5 text-sm text-muted">
             <span ref={statusDotRef} aria-hidden="true" className="tap-status-dot" />
             Connected
@@ -150,135 +146,69 @@ function TapPage() {
           <ThemeToggle />
         </header>
 
-        <main id="content" ref={mainRef} tabIndex={-1} className="mt-12 sm:mt-20">
-          <h1 className="text-[2.125rem] leading-[1.12] font-medium tracking-[-0.025em] text-balance sm:text-[3rem]">
-            <span className="tap-reveal block" style={at(0.95)}>
+        {/* Centered in the space between header and footer, like a card */}
+        <main id="content" ref={mainRef} tabIndex={-1} className="flex flex-1 flex-col justify-center py-10">
+          <h1 className="text-[2.125rem] leading-[1.12] font-medium tracking-[-0.025em] text-balance">
+            <span className="tap-reveal block" style={at(1.4)}>
               {lead}
             </span>
             {follow.length > 0 && (
-              <span className="tap-reveal block text-muted" style={at(1.1)}>
+              <span className="tap-reveal block text-muted" style={at(1.5)}>
                 {follow.join(" ")}
               </span>
             )}
           </h1>
 
-          <div className="tap-reveal mt-10 sm:mt-12" style={at(1.3)}>
+          <div className="tap-reveal mt-8" style={at(1.6)}>
             <p className="text-[1.0625rem] font-medium">{profile.name}</p>
             <p className="text-muted">{profile.positioning}</p>
-            <p className="text-muted">
+            <p className="mt-1 text-sm text-muted">
               {profile.school} · Graduating {profile.graduation}
             </p>
           </div>
 
-          <p className="tap-reveal mt-5 max-w-[34rem] text-pretty" style={at(1.42)}>
-            {supporting}
-          </p>
-
           <nav aria-label="Start here" className="mt-10">
-            <ul>
-              <ActionRow href="#work" label={cta.work} hint={`${featured.length} projects`} icon="↓" delay={1.54} />
-              <ActionRow href={site.resume} label={cta.resume} hint="PDF" icon="↗" delay={1.62} external />
-              <ActionRow href="#connect" label={cta.connect} hint="Save my contact" icon="↓" delay={1.7} />
+            <ul className="divide-y divide-line">
+              <Action delay={1.66}>
+                <Link to="/" hash="work" className="tap-row tap-press group">
+                  {cta.work}
+                  <Arrow className="tap-arrow-right">→</Arrow>
+                </Link>
+              </Action>
+              <Action delay={1.72}>
+                <a href={site.resume} target="_blank" rel="noopener noreferrer" className="tap-row tap-press group">
+                  {cta.resume}
+                  <span className="flex items-center gap-2.5">
+                    <span className="text-sm text-muted">PDF</span>
+                    <Arrow className="tap-arrow-out">↗</Arrow>
+                  </span>
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              </Action>
+              <Action delay={1.78}>
+                <a
+                  href={vcardHref}
+                  download="Gabriel-Ferreira.vcf"
+                  onClick={() => setCardTaps((n) => n + 1)}
+                  className="tap-row tap-press group"
+                >
+                  {cta.contact}
+                  {/* Re-keyed per tap so the arrow drops each time; no claim the card was saved */}
+                  <Arrow key={cardTaps} className={`tap-arrow-down ${cardTaps ? "tap-drop" : ""}`}>
+                    ↓
+                  </Arrow>
+                </a>
+              </Action>
             </ul>
           </nav>
-
-          <div className="tap-reveal" style={at(1.8)}>
-            <Section id="work" title="Selected work">
-              <ul className="space-y-6">
-                {featured.map((p) => (
-                  <li key={p.title}>
-                    <h3 className="font-medium">{p.href ? <External href={p.href}>{p.title}</External> : p.title}</h3>
-                    <p className="text-muted">{p.description}</p>
-                    <p className="mt-0.5 text-sm text-muted">{p.meta}</p>
-                  </li>
-                ))}
-              </ul>
-            </Section>
-
-            <Section id="connect" title="Let's connect">
-              <a
-                href={vcardHref}
-                download="Gabriel-Ferreira.vcf"
-                onClick={() => setCardRequested(true)}
-                className="tap-button tap-press inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-fg px-6 font-medium hover:opacity-85 sm:w-auto"
-              >
-                <svg
-                  // Re-mounts per tap so the arrow drops again each time
-                  key={String(cardRequested)}
-                  viewBox="0 0 24 24"
-                  className={`size-[1.125rem] ${cardRequested ? "tap-drop" : ""}`}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M12 4v11M7 10l5 5 5-5M5 20h14" />
-                </svg>
-                Save contact card
-              </a>
-              {/* Only says what we know: the card was requested, not that it was saved */}
-              <p className="mt-3 text-sm text-muted" aria-live="polite">
-                {cardRequested
-                  ? "Your phone should open the card. Add it to save my details."
-                  : "Adds my email, phone and links to your contacts."}
-              </p>
-
-              <ul className="mt-8 border-t border-line">
-                <li className="flex items-center gap-3 border-b border-line">
-                  <a href={`mailto:${site.email}`} className="tap-plain tap-press group flex min-h-14 min-w-0 flex-1 items-center justify-between gap-4 py-3">
-                    <span className="font-medium">Email</span>
-                    <span className="min-w-0 truncate text-right text-muted transition-colors group-hover:text-fg">{site.email}</span>
-                  </a>
-                  <CopyButton text={site.email} />
-                </li>
-                {links.map((c) => {
-                  const external = c.href.startsWith("http");
-                  return (
-                    <li key={c.label} className="border-b border-line">
-                      <a
-                        href={c.href}
-                        {...(external && { target: "_blank", rel: "noopener noreferrer" })}
-                        className="tap-plain tap-press group relative flex min-h-14 items-center justify-between gap-4 py-3"
-                      >
-                        <span className="font-medium">{c.label}</span>
-                        <span className="min-w-0 truncate text-right text-muted transition-colors group-hover:text-fg">
-                          {c.value}
-                        </span>
-                        {/* Outside the truncated span: an absolute child there escapes its clipping and widens the page */}
-                        {external && <span className="sr-only"> (opens in a new tab)</span>}
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
-            </Section>
-
-            <details className="tap-details group mt-14 sm:mt-16">
-              <summary className="tap-press inline-flex min-h-11 cursor-pointer list-none items-center gap-2 font-medium [&::-webkit-details-marker]:hidden">
-                Why the NFC?
-                <span aria-hidden="true" className="text-muted transition-transform duration-200 group-open:rotate-45">
-                  +
-                </span>
-              </summary>
-              <div className="tap-details-body mt-2 max-w-[34rem] space-y-3 text-muted">
-                {whyNfc.map((p) => (
-                  <p key={p}>{p}</p>
-                ))}
-              </div>
-            </details>
-
-            <footer className="mt-16 border-t border-line pt-5">
-              <Link to="/" className="tap-quiet tap-press inline-flex min-h-11 items-center gap-1.5 text-sm">
-                Explore my website
-                <span aria-hidden="true" className="tap-arrow">
-                  →
-                </span>
-              </Link>
-            </footer>
-          </div>
         </main>
+
+        <footer className="tap-reveal" style={at(1.78)}>
+          <Link to="/" className="tap-quiet tap-press group inline-flex min-h-11 items-center gap-1.5 text-sm">
+            Explore my website
+            <Arrow className="tap-arrow-right">→</Arrow>
+          </Link>
+        </footer>
       </div>
     </div>
   );
@@ -313,94 +243,18 @@ function Handshake({
   );
 }
 
-function CopyButton({ text }: { text: string }) {
-  const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
-  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
-
-  async function copy() {
-    try {
-      await navigator.clipboard.writeText(text);
-      setState("copied");
-    } catch {
-      setState("failed");
-    }
-    clearTimeout(timer.current);
-    timer.current = setTimeout(() => setState("idle"), 2000);
-  }
-
-  useEffect(() => () => clearTimeout(timer.current), []);
-
+function Action({ delay, children }: { delay: number; children: ReactNode }) {
   return (
-    <>
-      <button
-        type="button"
-        onClick={copy}
-        className="tap-press inline-flex min-h-11 min-w-[5.75rem] shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-line px-3.5 text-sm text-muted transition-colors hover:text-fg"
-      >
-        {state === "copied" ? (
-          <>
-            <svg viewBox="0 0 16 16" className="tap-check size-3.5 text-fg" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M3 8.5 6.5 12 13 4.5" />
-            </svg>
-            <span className="text-fg">Copied</span>
-          </>
-        ) : state === "failed" ? (
-          "Try again"
-        ) : (
-          <>
-            Copy<span className="sr-only"> email address</span>
-          </>
-        )}
-      </button>
-      <span className="sr-only" aria-live="polite">
-        {state === "copied" ? "Email address copied" : state === "failed" ? "Couldn't copy the email address" : ""}
-      </span>
-    </>
-  );
-}
-
-function ActionRow({
-  href,
-  label,
-  hint,
-  icon,
-  delay,
-  external,
-}: {
-  href: string;
-  label: string;
-  hint: string;
-  icon: string;
-  delay: number;
-  external?: boolean;
-}) {
-  return (
-    <li className="tap-reveal border-b border-line first:border-t" style={at(delay)}>
-      <a
-        href={href}
-        {...(external && { target: "_blank", rel: "noopener noreferrer" })}
-        className="tap-plain tap-press group relative flex min-h-16 items-center justify-between gap-4 py-3"
-      >
-        <span className="text-[1.1875rem] font-medium tracking-[-0.01em]">{label}</span>
-        <span className="flex items-center gap-3 text-sm text-muted">
-          {hint}
-          <span aria-hidden="true" className={`tap-arrow inline-block text-base text-fg ${icon === "↓" ? "tap-arrow-down" : "tap-arrow-out"}`}>
-            {icon}
-          </span>
-        </span>
-        {external && <span className="sr-only"> (opens in a new tab)</span>}
-      </a>
+    <li className="tap-reveal" style={at(delay)}>
+      {children}
     </li>
   );
 }
 
-function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
+function Arrow({ className, children }: { className: string; children: ReactNode }) {
   return (
-    <section id={id} aria-labelledby={`${id}-heading`} className="mt-16 scroll-mt-6 sm:mt-20">
-      <h2 id={`${id}-heading`} className="mb-5 text-[1.0625rem] font-medium">
-        {title}
-      </h2>
+    <span aria-hidden="true" className={`tap-arrow inline-block text-muted transition-colors group-hover:text-fg ${className}`}>
       {children}
-    </section>
+    </span>
   );
 }
