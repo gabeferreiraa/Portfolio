@@ -4,7 +4,7 @@ import { ThemeToggle } from "../components/ThemeToggle";
 import { site } from "../content";
 import { introTempo, profile, tapPage, vcardHref } from "../tap/config";
 
-const title = `Meet ${site.name} — ${profile.positioning}`;
+const title = `Meet ${site.name} — ${profile.positioningFull}`;
 const description = `${site.name} is a developer with a background in User Experience and Interaction Design from ${profile.school}, graduating ${profile.graduation}. Work, resume and contact card.`;
 
 // Per-tab memory of the intro: a reload, Back, or returning from another page skips

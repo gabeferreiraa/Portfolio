@@ -18,7 +18,10 @@ export type IntroId = keyof typeof intros;
 // Shown under my name in every mode.
 export const profile = {
   name: site.name,
+  // Short form on the page, where I'm there to explain it in person
   positioning: "Developer · UXID",
+  // Spelled out where it travels without me: tab title, link previews, contact card
+  positioningFull: "Developer · User Experience & Interaction Design",
   school: "Drexel University",
   // Shown as "Graduating …"; after it passes, change the wording in routes/tap.tsx and tap/vcard.ts
   graduation: "June 2027",

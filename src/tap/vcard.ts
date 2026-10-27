@@ -17,7 +17,7 @@ export function buildVCard() {
     "VERSION:3.0",
     `N:${esc(last)};${esc(first)};;;`,
     `FN:${esc(site.name)}`,
-    `TITLE:${esc(profile.positioning)}`,
+    `TITLE:${esc(profile.positioningFull)}`,
     `EMAIL;TYPE=INTERNET,PREF:${site.email}`,
     `TEL;TYPE=CELL:${tel}`,
     `URL:${site.url}`,
