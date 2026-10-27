@@ -5,7 +5,7 @@ import { site } from "../content";
 import { introTempo, profile, tapPage, vcardHref } from "../tap/config";
 
 const title = `Meet ${site.name} — ${profile.positioning}`;
-const description = `${site.name} is a developer with a background in UX and Interaction Design from ${profile.school}, graduating ${profile.graduation}. Work, resume and contact card.`;
+const description = `${site.name} is a developer with a background in User Experience and Interaction Design from ${profile.school}, graduating ${profile.graduation}. Work, resume and contact card.`;
 
 // Per-tab memory of the intro: a reload, Back, or returning from another page skips
 // it. sessionStorage ends with the tab, so nothing outlives the visit.
@@ -170,12 +170,6 @@ function TapPage() {
           <nav aria-label="Start here" className="mt-10">
             <ul className="divide-y divide-line">
               <Action delay={1.66}>
-                <Link to="/" hash="work" className="tap-row tap-press group">
-                  {cta.work}
-                  <Arrow className="tap-arrow-right">→</Arrow>
-                </Link>
-              </Action>
-              <Action delay={1.72}>
                 <a href={site.resume} target="_blank" rel="noopener noreferrer" className="tap-row tap-press group">
                   {cta.resume}
                   <span className="flex items-center gap-2.5">
@@ -185,6 +179,12 @@ function TapPage() {
                   <span className="sr-only"> (opens in a new tab)</span>
                 </a>
               </Action>
+              <Action delay={1.72}>
+                <Link to="/" hash="work" className="tap-row tap-press group">
+                  {cta.work}
+                  <Arrow className="tap-arrow-right">→</Arrow>
+                </Link>
+              </Action>
               <Action delay={1.78}>
                 <a
                   href={vcardHref}
@@ -193,7 +193,6 @@ function TapPage() {
                   className="tap-row tap-press group"
                 >
                   {cta.contact}
-                  {/* Re-keyed per tap so the arrow drops each time; no claim the card was saved */}
                   <Arrow key={cardTaps} className={`tap-arrow-down ${cardTaps ? "tap-drop" : ""}`}>
                     ↓
                   </Arrow>

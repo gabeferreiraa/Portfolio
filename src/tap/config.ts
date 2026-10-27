@@ -8,7 +8,7 @@ import { site } from "../content";
 // ---------------------------------------------------------------------------
 
 export const intros = {
-  A: ["Nice to meet you.", "You've already experienced my work."],
+  A: ["Nice to meet you.", "You just experienced my work."],
   B: ["That wasn't just a tap.", "That was intentional."],
   C: ["You just experienced", "my approach to design."],
 } satisfies Record<string, string[]>;
@@ -18,7 +18,7 @@ export type IntroId = keyof typeof intros;
 // Shown under my name in every mode.
 export const profile = {
   name: site.name,
-  positioning: "Developer · UX & Interaction Design",
+  positioning: "Developer · User Experience and Interaction Design",
   school: "Drexel University",
   // Shown as "Graduating …"; after it passes, change the wording in routes/tap.tsx and tap/vcard.ts
   graduation: "June 2027",
