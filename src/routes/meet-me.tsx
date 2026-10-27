@@ -25,8 +25,8 @@ export const Route = createFileRoute("/meet-me")({
   component: MeetMe,
 });
 
-// Matches the last reveal in styles.css (.mm-*): 2.2s delay + 0.5s
-const INTRO_MS = 2700;
+// Matches the last reveal: 2.8s delay + 0.65s (.mm-reveal in styles.css)
+const INTRO_MS = 3450;
 
 // Delay before an element's entrance animation
 const at = (seconds: number): CSSProperties => ({ animationDelay: `${seconds}s` });
@@ -81,7 +81,7 @@ function MeetMe() {
       </button>
 
       <div className="mx-auto max-w-[760px] px-5 pt-6 pb-12 sm:px-6 sm:pt-10">
-        <header className="mm-reveal flex items-center justify-between" style={at(1.05)}>
+        <header className="mm-reveal flex items-center justify-between" style={at(1.5)}>
           <p className="flex items-center gap-2.5 text-sm text-muted">
             <span aria-hidden="true" className="mm-status-dot" />
             Connected
@@ -91,17 +91,17 @@ function MeetMe() {
 
         <main id="content" ref={mainRef} tabIndex={-1} className="mt-12 sm:mt-20">
           <h1 className="text-[2.125rem] leading-[1.12] font-medium tracking-[-0.025em] text-balance sm:text-[3rem]">
-            <span className="mm-reveal block" style={at(0.95)}>
+            <span className="mm-reveal block" style={at(1.4)}>
               {lead}
             </span>
             {follow.length > 0 && (
-              <span className="mm-reveal block text-muted" style={at(1.2)}>
+              <span className="mm-reveal block text-muted" style={at(1.65)}>
                 {follow.join(" ")}
               </span>
             )}
           </h1>
 
-          <div className="mm-reveal mt-10 sm:mt-12" style={at(1.5)}>
+          <div className="mm-reveal mt-10 sm:mt-12" style={at(2.0)}>
             <p className="text-[1.0625rem] font-medium">{profile.name}</p>
             <p className="text-muted">{profile.positioning}</p>
             <p className="text-muted">
@@ -109,19 +109,19 @@ function MeetMe() {
             </p>
           </div>
 
-          <p className="mm-reveal mt-5 max-w-[34rem] text-pretty" style={at(1.7)}>
+          <p className="mm-reveal mt-5 max-w-[34rem] text-pretty" style={at(2.2)}>
             {supporting}
           </p>
 
           <nav aria-label="Start here" className="mt-10">
             <ul>
-              <ActionRow href="#work" label={cta.work} hint={`${featured.length} projects`} icon="↓" delay={1.9} />
-              <ActionRow href={site.resume} label={cta.resume} hint="PDF" icon="↗" delay={2.0} external />
-              <ActionRow href="#connect" label={cta.connect} hint="Save my contact" icon="↓" delay={2.1} />
+              <ActionRow href="#work" label={cta.work} hint={`${featured.length} projects`} icon="↓" delay={2.4} />
+              <ActionRow href={site.resume} label={cta.resume} hint="PDF" icon="↗" delay={2.52} external />
+              <ActionRow href="#connect" label={cta.connect} hint="Save my contact" icon="↓" delay={2.64} />
             </ul>
           </nav>
 
-          <div className="mm-reveal" style={at(2.2)}>
+          <div className="mm-reveal" style={at(2.8)}>
             <Section id="work" title="Selected work">
               <ul className="space-y-6">
                 {featured.map((p) => (
@@ -161,13 +161,14 @@ function MeetMe() {
                       <a
                         href={c.href}
                         {...(external && { target: "_blank", rel: "noopener noreferrer" })}
-                        className="group flex min-h-14 items-center justify-between gap-4 py-3 mm-plain"
+                        className="group relative flex min-h-14 items-center justify-between gap-4 py-3 mm-plain"
                       >
                         <span className="font-medium">{c.label}</span>
                         <span className="min-w-0 truncate text-right text-muted transition-colors group-hover:text-fg">
                           {c.value}
-                          {external && <span className="sr-only"> (opens in a new tab)</span>}
                         </span>
+                        {/* Outside the truncated span: an absolute child there escapes its clipping and widens the page */}
+                        {external && <span className="sr-only"> (opens in a new tab)</span>}
                       </a>
                     </li>
                   );
@@ -229,7 +230,7 @@ function ActionRow({
       <a
         href={href}
         {...(external && { target: "_blank", rel: "noopener noreferrer" })}
-        className="group flex min-h-16 items-center justify-between gap-4 py-3 mm-plain transition-colors active:bg-fg/[0.04]"
+        className="group relative flex min-h-16 items-center justify-between gap-4 py-3 mm-plain transition-colors active:bg-fg/[0.04]"
       >
         <span className="text-[1.1875rem] font-medium tracking-[-0.01em]">{label}</span>
         <span className="flex items-center gap-3 text-sm text-muted">
