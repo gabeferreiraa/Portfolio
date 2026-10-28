@@ -24,7 +24,7 @@ Everything lives in **`src/content.ts`**: name, intro, links, experience, projec
 
 - **Projects** — add `href` to make a title a link; without it the title renders as plain text. Order = display order.
 - **Experience** — `experience` list (Linque, Proconex, Impossible Solutions); `current: true` marks roles you still hold. Order = display order.
-- **Resume** — replace `public/pdf/Resume-2026.pdf`, or add a new file and update `site.resume`.
+- **Resume** — replace `public/pdf/Gabriel-Ferreira-Resume.pdf`, or add a new file and update `site.resume`.
 
 Styles and color tokens are in `src/styles.css`. The theme follows the OS until a visitor uses the toggle (`src/components/ThemeToggle.tsx`), which sets `<html data-theme>` and saves the choice in localStorage. The page markup is `src/routes/index.tsx`; `<head>` metadata and JSON-LD are in `src/routes/__root.tsx`.
 

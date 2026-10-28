@@ -16,7 +16,7 @@ export const site = {
   // E.164 form for the tel: link.
   phoneHref: "tel:+16093517981",
   // Replace the file in /public/pdf (or change this path) to update the resume.
-  resume: "/pdf/Resume-2026.pdf",
+  resume: "/pdf/Gabriel-Ferreira-Resume.pdf",
 };
 
 export type Link = { label: string; href: string };
