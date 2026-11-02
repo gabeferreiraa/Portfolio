@@ -3,8 +3,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ContactForm } from "../components/ContactForm";
 import { DayCountdown } from "../components/DayCountdown";
 import { External } from "../components/External";
+import { Intro } from "../components/Intro";
 import { ThemeToggle } from "../components/ThemeToggle";
-import { experience, intro, profiles, projects, site } from "../content";
+import { experience, profiles, projects, site } from "../content";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -27,21 +28,7 @@ function Home() {
         </header>
 
         <main id="content" tabIndex={-1}>
-          <div className="mt-8 space-y-4">
-            {intro.map((parts, i) => (
-              <p key={i}>
-                {parts.map((part, j) =>
-                  typeof part === "string" ? (
-                    part
-                  ) : (
-                    <External key={j} href={part.href}>
-                      {part.label}
-                    </External>
-                  ),
-                )}
-              </p>
-            ))}
-          </div>
+          <Intro className="mt-8 space-y-4" />
 
           <Section id="experience" title="Experience">
             <ul className="space-y-6">

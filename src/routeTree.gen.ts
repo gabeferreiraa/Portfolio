@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GabrielFerreiraDotvcfRouteImport } from './routes/gabriel-ferreira[.]vcf'
 import { Route as MeetMeRouteImport } from './routes/meet-me'
+import { Route as ResumeRouteImport } from './routes/resume'
 import { Route as TapRouteImport } from './routes/tap'
 import { Route as PdfResume2026DotpdfRouteImport } from './routes/pdf/Resume-2026[.]pdf'
 
@@ -30,6 +31,11 @@ const MeetMeRoute = MeetMeRouteImport.update({
   path: '/meet-me',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResumeRoute = ResumeRouteImport.update({
+  id: '/resume',
+  path: '/resume',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TapRoute = TapRouteImport.update({
   id: '/tap',
   path: '/tap',
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/gabriel-ferreira.vcf': typeof GabrielFerreiraDotvcfRoute
   '/meet-me': typeof MeetMeRoute
+  '/resume': typeof ResumeRoute
   '/tap': typeof TapRoute
   '/pdf/Resume-2026.pdf': typeof PdfResume2026DotpdfRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/gabriel-ferreira.vcf': typeof GabrielFerreiraDotvcfRoute
   '/meet-me': typeof MeetMeRoute
+  '/resume': typeof ResumeRoute
   '/tap': typeof TapRoute
   '/pdf/Resume-2026.pdf': typeof PdfResume2026DotpdfRoute
 }
@@ -60,21 +68,33 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/gabriel-ferreira.vcf': typeof GabrielFerreiraDotvcfRoute
   '/meet-me': typeof MeetMeRoute
+  '/resume': typeof ResumeRoute
   '/tap': typeof TapRoute
   '/pdf/Resume-2026.pdf': typeof PdfResume2026DotpdfRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/gabriel-ferreira.vcf' | '/meet-me' | '/tap' | '/pdf/Resume-2026.pdf'
+    | '/'
+    | '/gabriel-ferreira.vcf'
+    | '/meet-me'
+    | '/resume'
+    | '/tap'
+    | '/pdf/Resume-2026.pdf'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/gabriel-ferreira.vcf' | '/meet-me' | '/tap' | '/pdf/Resume-2026.pdf'
+    | '/'
+    | '/gabriel-ferreira.vcf'
+    | '/meet-me'
+    | '/resume'
+    | '/tap'
+    | '/pdf/Resume-2026.pdf'
   id:
     | '__root__'
     | '/'
     | '/gabriel-ferreira.vcf'
     | '/meet-me'
+    | '/resume'
     | '/tap'
     | '/pdf/Resume-2026.pdf'
   fileRoutesById: FileRoutesById
@@ -83,6 +103,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   GabrielFerreiraDotvcfRoute: typeof GabrielFerreiraDotvcfRoute
   MeetMeRoute: typeof MeetMeRoute
+  ResumeRoute: typeof ResumeRoute
   TapRoute: typeof TapRoute
   PdfResume2026DotpdfRoute: typeof PdfResume2026DotpdfRoute
 }
@@ -110,6 +131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeetMeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/resume': {
+      id: '/resume'
+      path: '/resume'
+      fullPath: '/resume'
+      preLoaderRoute: typeof ResumeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tap': {
       id: '/tap'
       path: '/tap'
@@ -131,6 +159,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   GabrielFerreiraDotvcfRoute: GabrielFerreiraDotvcfRoute,
   MeetMeRoute: MeetMeRoute,
+  ResumeRoute: ResumeRoute,
   TapRoute: TapRoute,
   PdfResume2026DotpdfRoute: PdfResume2026DotpdfRoute,
 }

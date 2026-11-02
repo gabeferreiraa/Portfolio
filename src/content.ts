@@ -66,19 +66,19 @@ export const experience: Role[] = [
       "An industrial intelligence company connecting IT, OT and AI systems.",
   },
   {
-    role: "Co-op · 2025-2026",
-    org: "Proconex",
-    href: "https://www.proconexdirect.com",
-    description:
-      "A six-month co-op building software for the industrial automation and process control industry.",
-  },
-  {
-    role: "Founder",
+    role: "Founder · Current",
     current: true,
     org: "Impossible Solutions",
     href: "https://impossiblesolutions.studio",
     description:
       "A software studio founded at Drexel and rooted in Philadelphia. We design, build and ship websites, mobile apps and full-stack platforms for founders and product teams.",
+  },
+  {
+    role: "Co-op · 2025-2026",
+    org: "Proconex",
+    href: "https://www.proconexdirect.com",
+    description:
+      "A six-month co-op building software for the industrial automation and process control industry.",
   },
 ];
 
@@ -126,5 +126,131 @@ export const projects: Project[] = [
       "A custom WordPress site for Drexel University's Entrepreneurial Game Studio.",
     meta: "Website · WordPress, Elementor · 2024",
     href: "https://egs.drexel.edu/",
+  },
+];
+
+// HTML version of the resume at /resume. Keep in step with the PDF in /public/pdf.
+
+// 1 Familiar · 2 Proficient · 3 Advanced · 4 Expert
+export type Level = 1 | 2 | 3 | 4;
+export const levelLabels: Record<Level, string> = {
+  1: "Familiar",
+  2: "Proficient",
+  3: "Advanced",
+  4: "Expert",
+};
+
+export type Skill = { name: string; level: Level };
+export type SkillGroup = { title: string; skills: Skill[] };
+
+// Strongest first within each group.
+export const skills: SkillGroup[] = [
+  {
+    title: "Technologies",
+    skills: [
+      { name: "React", level: 3 },
+      { name: "TypeScript", level: 3 },
+      { name: "JavaScript", level: 3 },
+      { name: "HTML5", level: 3 },
+      { name: "CSS3", level: 3 },
+      { name: "Tailwind", level: 3 },
+      { name: "React Native", level: 3 },
+      { name: "Next.js", level: 3 },
+      { name: "REST APIs", level: 3 },
+      { name: "C#", level: 2 },
+      { name: ".NET MAUI", level: 2 },
+      { name: "Storybook", level: 2 },
+      { name: "Node", level: 2 },
+      { name: "SASS", level: 2 },
+      { name: "Supabase", level: 2 },
+      { name: "Firebase", level: 2 },
+      { name: "PostgreSQL", level: 2 },
+      { name: "MySQL", level: 2 },
+      { name: "SwiftUI", level: 1 },
+      { name: "PHP", level: 1 },
+    ],
+  },
+  {
+    title: "Software",
+    skills: [
+      { name: "Figma", level: 3 },
+      { name: "VS Code", level: 3 },
+      { name: "Photoshop", level: 2 },
+      { name: "Illustrator", level: 2 },
+      { name: "Premiere Pro", level: 2 },
+      { name: "After Effects", level: 1 },
+      { name: "Canva", level: 2 },
+    ],
+  },
+];
+
+export const spokenLanguages = [
+  { name: "English", level: "Fluent" },
+  { name: "Portuguese", level: "Fluent" },
+  { name: "Spanish", level: "Fluent" },
+];
+
+export type ResumeEntry = {
+  title: string;
+  org: string;
+  location: string;
+  dates: string;
+  bullets: string[];
+};
+
+export const resumeExperience: ResumeEntry[] = [
+  {
+    title: "Software Developer - Intern",
+    org: "Linque",
+    location: "Royersford, PA",
+    dates: "April 2025 – Current",
+    bullets: [
+      "Engineered a real-time output queue view in Mobius that surfaces each active device-fix task as it runs, giving plant operators live visibility into a process that previously had no feedback and reducing status-related support requests by 65%",
+      "Designed and built Scheduled General Exports (Scheduled GenEx), letting non-technical users automate device data exports on custom recurring schedules, which replaced manual export pulls and saved customers ~10 hours per month",
+      "Architected light/dark mode and a full UI overhaul in a customer-facing .NET MAUI app",
+    ],
+  },
+  {
+    title: "Software Engineer - Intern",
+    org: "Proconex",
+    location: "Royersford, PA",
+    dates: "April 2025 – September 2025",
+    bullets: [
+      "Implemented dynamic dialogs to reduce repetitive code and streamline processes across the application, bringing total reusable dialogs to 40%",
+      "Built and executed Selenium test suites and regression testing workflows to ensure stability and catch issues early, resulting in less QA testing by several hours",
+      "Refactored a core search feature, reducing query wait times by up to 80% and significantly improving overall responsiveness",
+    ],
+  },
+  {
+    title: "Software Engineer - Frontend",
+    org: "Impact Six, LLC",
+    location: "Philadelphia, PA",
+    dates: "February – Current",
+    bullets: [
+      "Developed interactive, reusable UI components using React and Storybook, improving user experience, accessibility, and design consistency across applications.",
+      "Integrated front-end with backend APIs (Laravel, Next.js) using TypeScript, enhancing data flow efficiency and improving overall application performance by 85%.",
+      "Optimized state management using React App Providers, facilitating seamless feature integration and improving application scalability.",
+      "Contributed to project stability through Git version control, managing pull requests, branch workflows, and resolving merge conflicts to maintain code integrity.",
+    ],
+  },
+];
+
+export const education = {
+  school: "Drexel University",
+  degree: "BS in User Experience & Interaction Design",
+  location: "Philadelphia, PA",
+  dates: "Anticipated Graduation: June 2027",
+};
+
+export const resumeProjects: ResumeEntry[] = [
+  {
+    title: "Moonrise - iOS Meditation App",
+    org: "Freelance Mobile Developer for Jeff Bhasker",
+    location: "Philadelphia, PA",
+    dates: "October 2025 – February 2026",
+    bullets: [
+      "Shipped a React Native (Expo) meditation app to the App Store via TestFlight and EAS deployments",
+      "Built a native Swift/WidgetKit widget with live moon phases, plus Supabase chat and push alerts",
+    ],
   },
 ];
