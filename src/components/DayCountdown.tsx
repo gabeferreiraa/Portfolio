@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 // Milliseconds until midnight in the visitor's own timezone (from their device clock — no location needed)
-function msUntilMidnight() {
+export function msUntilMidnight() {
   const now = new Date();
   const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
   return midnight.getTime() - now.getTime();
@@ -15,7 +15,7 @@ function format(ms: number) {
   return `${h}h ${String(m).padStart(2, "0")}m ${String(s).padStart(2, "0")}s`;
 }
 
-const DAY = 86_400_000;
+export const DAY = 86_400_000;
 const CELLS = 20;
 
 // [██████░░░░] filled by how much of the visitor's day has passed

@@ -17,6 +17,7 @@ import { Route as TapRouteImport } from './routes/tap'
 import { Route as CaseStudyIndexRouteImport } from './routes/case-study/index'
 import { Route as CaseStudySlugRouteImport } from './routes/case-study/$slug'
 import { Route as PdfResume2026DotpdfRouteImport } from './routes/pdf/Resume-2026[.]pdf'
+import { Route as PlaygroundAsciiRouteImport } from './routes/playground/ascii'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -58,6 +59,11 @@ const PdfResume2026DotpdfRoute = PdfResume2026DotpdfRouteImport.update({
   path: '/pdf/Resume-2026.pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlaygroundAsciiRoute = PlaygroundAsciiRouteImport.update({
+  id: '/playground/ascii',
+  path: '/playground/ascii',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/tap': typeof TapRoute
   '/case-study/$slug': typeof CaseStudySlugRoute
   '/pdf/Resume-2026.pdf': typeof PdfResume2026DotpdfRoute
+  '/playground/ascii': typeof PlaygroundAsciiRoute
   '/case-study/': typeof CaseStudyIndexRoute
 }
 export interface FileRoutesByTo {
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/tap': typeof TapRoute
   '/case-study/$slug': typeof CaseStudySlugRoute
   '/pdf/Resume-2026.pdf': typeof PdfResume2026DotpdfRoute
+  '/playground/ascii': typeof PlaygroundAsciiRoute
   '/case-study': typeof CaseStudyIndexRoute
 }
 export interface FileRoutesById {
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/tap': typeof TapRoute
   '/case-study/$slug': typeof CaseStudySlugRoute
   '/pdf/Resume-2026.pdf': typeof PdfResume2026DotpdfRoute
+  '/playground/ascii': typeof PlaygroundAsciiRoute
   '/case-study/': typeof CaseStudyIndexRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/tap'
     | '/case-study/$slug'
     | '/pdf/Resume-2026.pdf'
+    | '/playground/ascii'
     | '/case-study/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
     | '/tap'
     | '/case-study/$slug'
     | '/pdf/Resume-2026.pdf'
+    | '/playground/ascii'
     | '/case-study'
   id:
     | '__root__'
@@ -120,6 +131,7 @@ export interface FileRouteTypes {
     | '/tap'
     | '/case-study/$slug'
     | '/pdf/Resume-2026.pdf'
+    | '/playground/ascii'
     | '/case-study/'
   fileRoutesById: FileRoutesById
 }
@@ -131,6 +143,7 @@ export interface RootRouteChildren {
   TapRoute: typeof TapRoute
   CaseStudySlugRoute: typeof CaseStudySlugRoute
   PdfResume2026DotpdfRoute: typeof PdfResume2026DotpdfRoute
+  PlaygroundAsciiRoute: typeof PlaygroundAsciiRoute
   CaseStudyIndexRoute: typeof CaseStudyIndexRoute
 }
 
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PdfResume2026DotpdfRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/playground/ascii': {
+      id: '/playground/ascii'
+      path: '/playground/ascii'
+      fullPath: '/playground/ascii'
+      preLoaderRoute: typeof PlaygroundAsciiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -203,6 +223,7 @@ const rootRouteChildren: RootRouteChildren = {
   TapRoute: TapRoute,
   CaseStudySlugRoute: CaseStudySlugRoute,
   PdfResume2026DotpdfRoute: PdfResume2026DotpdfRoute,
+  PlaygroundAsciiRoute: PlaygroundAsciiRoute,
   CaseStudyIndexRoute: CaseStudyIndexRoute,
 }
 export const routeTree = rootRouteImport
