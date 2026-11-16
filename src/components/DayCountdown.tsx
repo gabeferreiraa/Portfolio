@@ -15,6 +15,15 @@ function format(ms: number) {
   return `${h}h ${String(m).padStart(2, "0")}m ${String(s).padStart(2, "0")}s`;
 }
 
+const DAY = 86_400_000;
+const CELLS = 20;
+
+// [██████░░░░] filled by how much of the visitor's day has passed
+function bar(ms: number) {
+  const filled = Math.min(CELLS, Math.max(0, Math.round((1 - ms / DAY) * CELLS)));
+  return `[${"█".repeat(filled)}${"░".repeat(CELLS - filled)}]`;
+}
+
 // Counts down the rest of the visitor's day
 export function DayCountdown({ className }: { className?: string }) {
   // Unknown during SSR (the server can't know the visitor's timezone); set after mount
@@ -30,7 +39,11 @@ export function DayCountdown({ className }: { className?: string }) {
     // Kept in the layout before mount so the line doesn't pop in and shift the page
     <p className={className} style={left === null ? { visibility: "hidden" } : undefined}>
       You have <span className="text-fg tabular-nums">{left === null ? "0h 00m 00s" : format(left)}</span> left to make
-      the day great.
+      the day great.{" "}
+      {/* Fixed character count in a monospace face, so it never changes width. The text above says it in words. */}
+      <span aria-hidden="true" className="inline-block font-mono text-[0.8125rem] tracking-tight whitespace-nowrap">
+        {bar(left ?? DAY)}
+      </span>
     </p>
   );
 }

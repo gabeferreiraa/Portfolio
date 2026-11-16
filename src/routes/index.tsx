@@ -3,7 +3,9 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { ContactForm } from "../components/ContactForm";
 import { DayCountdown } from "../components/DayCountdown";
 import { External } from "../components/External";
+import { AsciiField } from "../components/AsciiField";
 import { Intro } from "../components/Intro";
+import { Scramble } from "../components/Scramble";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { experience, profiles, projects, site } from "../content";
 
@@ -19,7 +21,10 @@ function Home() {
       </a>
 
       <div className="mx-auto max-w-[760px] px-5 pt-16 pb-12 sm:px-6 sm:pt-24 md:pt-32">
-        <header>
+        {/* isolate: the field's -z-10 stays inside the header, above the page background */}
+        <header className="relative isolate">
+          {/* Reaches up into the top padding; never extends below the header into body text */}
+          <AsciiField className="absolute inset-x-0 -top-16 bottom-0 -z-10 sm:-top-24 md:-top-32" />
           <div className="flex items-start justify-between gap-4">
             <h1 className="text-[1.75rem] leading-tight font-medium tracking-tight sm:text-[2rem]">{site.name}</h1>
             <ThemeToggle />
@@ -35,7 +40,9 @@ function Home() {
               {experience.map((r) => (
                 <li key={r.org}>
                   <h3 className="font-medium">
-                    <External href={r.href}>{r.org}</External>
+                    <External href={r.href}>
+                      <Scramble text={r.org} />
+                    </External>
                   </h3>
                   <p className="text-sm text-muted">{r.role}</p>
                   {r.description && <p className="mt-1 text-muted">{r.description}</p>}
@@ -52,7 +59,13 @@ function Home() {
               {projects.map((p) => (
                 <li key={p.title}>
                   <h3 className="font-medium">
-                    {p.href ? <External href={p.href}>{p.title}</External> : p.title}
+                    {p.href ? (
+                      <External href={p.href}>
+                        <Scramble text={p.title} />
+                      </External>
+                    ) : (
+                      <Scramble text={p.title} />
+                    )}
                   </h3>
                   <p className="text-muted">{p.description}</p>
                   <p className="mt-0.5 text-sm text-muted">{p.meta}</p>

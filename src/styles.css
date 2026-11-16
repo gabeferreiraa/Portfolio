@@ -129,6 +129,14 @@ a:hover {
   color: var(--bg);
 }
 
+/* Header ASCII field: fades in from the right so the name and role, on the
+   left, sit over empty background, and fades out at the top and bottom edges */
+.ascii-field {
+  mask-image: linear-gradient(to right, transparent 30%, #000 75%),
+    linear-gradient(to bottom, transparent, #000 25%, #000 70%, transparent);
+  mask-composite: intersect;
+}
+
 /* Links that read as titles or cards (case studies): no underline. The arrow
    beside them moves on hover, so they don't rely on color alone. */
 .link-plain {
