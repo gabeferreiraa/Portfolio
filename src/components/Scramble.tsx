@@ -56,10 +56,13 @@ export function Scramble({ text }: { text: string }) {
   return (
     <span className="relative">
       <span ref={real}>{text}</span>
+      {/* line-height: normal matches the inline box it covers (the font's own height).
+          Inheriting the page's 1.7 would add half-leading above the glyphs and draw
+          the shuffle lower than the real text, so the link would appear to drop. */}
       <span
         ref={fake}
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 overflow-hidden whitespace-nowrap"
+        className="pointer-events-none absolute inset-0 overflow-hidden whitespace-nowrap [line-height:normal]"
       />
     </span>
   );
