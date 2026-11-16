@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 
-const GLYPHS = "abcdefghijklmnopqrstuvwxyz#%&*+=?";
+// Mostly the less common symbols, with a few letters so it still reads as text mid-shuffle
+const GLYPHS = "/\\|?!<>{}[]()_~^;:*+=#%&xkz";
 const DURATION = 300;
 
 // Letters shuffle and resolve left to right on hover or keyboard focus.

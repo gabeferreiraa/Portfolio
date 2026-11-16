@@ -1,9 +1,47 @@
 // Shared ASCII grid engine. An effect fills a brightness array V (0..1) and a hue
-// array H (degrees) per cell; the renderer maps V onto RAMP and draws each cell
-// from a pre-rendered glyph atlas, which is much cheaper than fillText per cell.
+// array H (degrees) per cell; the renderer maps V onto a character ramp and draws
+// each cell from a pre-rendered glyph atlas, which is much cheaper than fillText per cell.
 
 export const RAMP = " .:-=+*#%@";
-const LEVELS = RAMP.length;
+// The less common characters, ordered by measured ink at runtime (see symbolRamp)
+const SYMBOLS = ".'`,-_:;~^\"!|/\\?()[]{}<>+=*%#&";
+// Line glyphs for the Slashes set, indexed by direction: vertical, rising, horizontal, falling
+const LINES = "|/-\\";
+const LINE_LEVELS = 4;
+
+export type GlyphSet = "classic" | "symbols" | "slashes";
+
+export const glyphSets: { id: GlyphSet; label: string }[] = [
+  { id: "classic", label: "Classic" },
+  { id: "symbols", label: "Symbols" },
+  { id: "slashes", label: "Slashes" },
+];
+
+let symbolCache = "";
+
+// Sort SYMBOLS from sparse to dense by how many pixels each one actually inks in
+// the system monospace face, so the ramp is correct whatever font the OS has.
+// "@" stays last: settled cells in the name decode always read as "@".
+function symbolRamp() {
+  if (symbolCache) return symbolCache;
+  const c = document.createElement("canvas");
+  c.width = c.height = 40;
+  const g = c.getContext("2d", { willReadFrequently: true });
+  if (!g) return (symbolCache = " " + SYMBOLS + "@");
+  g.font = `32px ${FONT}`;
+  g.textAlign = "center";
+  g.textBaseline = "middle";
+  const ink = (ch: string) => {
+    g.clearRect(0, 0, 40, 40);
+    g.fillText(ch, 20, 20);
+    const d = g.getImageData(0, 0, 40, 40).data;
+    let sum = 0;
+    for (let i = 3; i < d.length; i += 4) sum += d[i];
+    return sum;
+  };
+  const sorted = [...SYMBOLS].map((ch) => ({ ch, ink: ink(ch) })).sort((a, b) => a.ink - b.ink);
+  return (symbolCache = " " + sorted.map((s) => s.ch).join("") + "@");
+}
 // Native color: hue is quantized to 15° steps so the atlas stays small
 const HUES = 24;
 const FONT = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
@@ -172,11 +210,16 @@ export class GridRenderer {
     return dark;
   }
 
-  private buildAtlas(mode: ColorMode, fg: string, dark: boolean) {
+  private ramp = RAMP;
+
+  private buildAtlas(mode: ColorMode, fg: string, dark: boolean, glyphs: GlyphSet) {
     const { cw, ch } = this;
+    this.ramp = glyphs === "classic" ? RAMP : symbolRamp();
+    const levels = this.ramp.length;
     const hues = mode === "native" ? HUES : 1;
     const a = this.atlas;
-    a.width = cw * (LEVELS - 1);
+    // Columns: the ramp (minus the space), then each line glyph at LINE_LEVELS brightnesses
+    a.width = cw * (levels - 1 + (glyphs === "slashes" ? LINES.length * LINE_LEVELS : 0));
     a.height = ch * hues;
     const c = a.getContext("2d");
     if (!c) return;
@@ -184,6 +227,10 @@ export class GridRenderer {
     c.font = `${Math.round(ch * 0.86)}px ${FONT}`;
     c.textAlign = "center";
     c.textBaseline = "middle";
+    // Sparse glyphs are also fainter, which reads as depth. Thin dark strokes on a
+    // light page wash out much sooner than light ones on dark, so light keeps a higher floor.
+    const alpha = (k: number) => (dark ? 0.32 + 0.68 * k : 0.62 + 0.38 * k);
+    const y0 = ch / 2 + ch * 0.04;
     for (let r = 0; r < hues; r++) {
       c.fillStyle =
         mode === "native"
@@ -191,42 +238,71 @@ export class GridRenderer {
           : mode === "mono"
             ? fg
             : FIXED[mode][dark ? "dark" : "light"];
-      for (let l = 1; l < LEVELS; l++) {
-        // Sparse glyphs are also fainter, which reads as depth. Thin dark strokes on a
-        // light page wash out much sooner than light ones on dark, so light keeps a higher floor.
-        const k = l / (LEVELS - 1);
-        c.globalAlpha = dark ? 0.32 + 0.68 * k : 0.62 + 0.38 * k;
-        c.fillText(RAMP[l], (l - 1) * cw + cw / 2, r * ch + ch / 2 + ch * 0.04);
+      for (let l = 1; l < levels; l++) {
+        c.globalAlpha = alpha(l / (levels - 1));
+        c.fillText(this.ramp[l], (l - 1) * cw + cw / 2, r * ch + y0);
+      }
+      if (glyphs === "slashes") {
+        for (let d = 0; d < LINES.length; d++) {
+          for (let l = 0; l < LINE_LEVELS; l++) {
+            c.globalAlpha = alpha((l + 1) / LINE_LEVELS);
+            const col = levels - 1 + d * LINE_LEVELS + l;
+            c.fillText(LINES[d], col * cw + cw / 2, r * ch + y0);
+          }
+        }
       }
     }
   }
 
-  draw(mode: ColorMode, fg: string, dark: boolean) {
+  draw(mode: ColorMode, fg: string, dark: boolean, glyphs: GlyphSet = "classic") {
     const ctx = this.ctx;
     if (!ctx) return;
     const { cw, ch, cols, rows, V, H } = this;
-    const key = `${mode}|${fg}|${dark}|${cw}|${ch}`;
+    const key = `${mode}|${fg}|${dark}|${cw}|${ch}|${glyphs}`;
     if (key !== this.atlasKey) {
-      this.buildAtlas(mode, fg, dark);
+      this.buildAtlas(mode, fg, dark, glyphs);
       this.atlasKey = key;
     }
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     const native = mode === "native";
+    const lines = glyphs === "slashes";
+    const levels = this.ramp.length;
     const atlas = this.atlas;
+    const at = (x: number, y: number) => (x < 0 || y < 0 || x >= cols || y >= rows ? 0 : V[y * cols + x]);
     for (let y = 0; y < rows; y++) {
       const dy = y * ch;
       const row = y * cols;
       for (let x = 0; x < cols; x++) {
         const v = V[row + x];
         if (!(v >= 0.1)) continue;
-        const level = v >= 1 ? LEVELS - 1 : (v * LEVELS) | 0;
         let sy = 0;
         if (native) {
           const hb = Math.round(H[row + x] / (360 / HUES)) % HUES;
           sy = (hb < 0 ? hb + HUES : hb || 0) * ch;
         }
-        ctx.drawImage(atlas, (level - 1) * cw, sy, cw, ch, x * cw, dy, cw, ch);
+        let sx = ((v >= 1 ? levels - 1 : (v * levels) | 0) - 1) * cw;
+        if (lines) {
+          // Which way does the brightness run through this cell? Compare the
+          // neighbour pairs along each of the four directions. A clear winner means
+          // the cell sits on a line or an edge, so it gets a stroke along it.
+          const along = [
+            at(x, y - 1) + at(x, y + 1), // |
+            at(x + 1, y - 1) + at(x - 1, y + 1), // /
+            at(x - 1, y) + at(x + 1, y), // -
+            at(x - 1, y - 1) + at(x + 1, y + 1), // \
+          ];
+          let best = 0;
+          for (let d = 1; d < 4; d++) if (along[d] > along[best]) best = d;
+          const across = along[(best + 2) % 4];
+          let second = 0;
+          for (let d = 0; d < 4; d++) if (d !== best && along[d] > second) second = along[d];
+          if (along[best] - across > 0.45 * v + 0.12 && along[best] - second > 0.08) {
+            const l = Math.min(LINE_LEVELS - 1, (v * LINE_LEVELS) | 0);
+            sx = (levels - 1 + best * LINE_LEVELS + l) * cw;
+          }
+        }
+        ctx.drawImage(atlas, sx, sy, cw, ch, x * cw, dy, cw, ch);
       }
     }
   }

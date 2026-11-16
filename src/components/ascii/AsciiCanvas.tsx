@@ -1,11 +1,12 @@
 import { useEffect, useRef, type CSSProperties } from "react";
-import { GridRenderer, type ColorMode, type EffectDef, type EffectOptions } from "./engine";
+import { GridRenderer, type ColorMode, type EffectDef, type EffectOptions, type GlyphSet } from "./engine";
 
 export type FrameStats = { fps: number; ms: number; hud: Record<string, string> };
 
 type Props = {
   effect: EffectDef;
   colorMode: ColorMode;
+  glyphs?: GlyphSet;
   /** Cell height in CSS px */
   cellSize: number;
   speed: number;
@@ -94,7 +95,7 @@ export function AsciiCanvas(props: Props) {
         });
         dirty = false;
       }
-      renderer.draw(live.current.colorMode, fg, dark);
+      renderer.draw(live.current.colorMode, fg, dark, live.current.glyphs);
     }
 
     function tick(now: number) {

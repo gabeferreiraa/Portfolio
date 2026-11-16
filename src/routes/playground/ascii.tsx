@@ -1,7 +1,7 @@
 import { useEffect, useState, type ChangeEvent } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { AsciiCanvas, type FrameStats } from "../../components/ascii/AsciiCanvas";
-import { colorModes, type ColorMode, type EffectDef } from "../../components/ascii/engine";
+import { colorModes, glyphSets, type ColorMode, type EffectDef, type GlyphSet } from "../../components/ascii/engine";
 import { effects } from "../../components/ascii/effects";
 import { UiDetails, uiDetails } from "../../components/ascii/UiDetails";
 import { ThemeToggle } from "../../components/ThemeToggle";
@@ -27,6 +27,7 @@ function Playground() {
   const [stars, setStars] = useState<string[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [mode, setMode] = useState<ColorMode>("mono");
+  const [glyphs, setGlyphs] = useState<GlyphSet>("slashes");
   // Small cells read as finer, more "real" detail; 10px still holds 60fps
   const [cell, setCell] = useState(10);
   const [speed, setSpeed] = useState(1);
@@ -130,22 +131,8 @@ function Playground() {
 
         {/* Controls stay mounted (just disabled for the DOM demo), so switching effects never shifts the stage */}
         <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
-          <div role="group" aria-label="Color" className="inline-flex overflow-hidden rounded-md border border-line">
-            {colorModes.map((m) => (
-              <button
-                key={m.id}
-                type="button"
-                aria-pressed={mode === m.id}
-                disabled={!isCanvas}
-                onClick={() => setMode(m.id)}
-                className={`cursor-pointer px-2.5 py-1 transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
-                  mode === m.id ? "bg-fg text-bg" : "text-muted hover:text-fg"
-                }`}
-              >
-                {m.label}
-              </button>
-            ))}
-          </div>
+          <Segmented label="Color" options={colorModes} value={mode} onChange={setMode} disabled={!isCanvas} />
+          <Segmented label="Glyphs" options={glyphSets} value={glyphs} onChange={setGlyphs} disabled={!isCanvas} />
           <Range label="Cell" value={cell} min={6} max={28} step={1} format={(v) => `${v}px`} onChange={setCell} disabled={!isCanvas} />
           <Range label="Speed" value={speed} min={0.25} max={3} step={0.25} format={(v) => `${v}×`} onChange={setSpeed} disabled={!isCanvas} />
           <button
@@ -187,6 +174,7 @@ function Playground() {
                 <AsciiCanvas
                   effect={active.def}
                   colorMode={mode}
+                  glyphs={glyphs}
                   cellSize={cell}
                   speed={speed}
                   paused={paused}
@@ -317,6 +305,39 @@ function HeroMock() {
       <p className="mt-6 max-w-[52ch]">
         I build web and mobile apps, with a focus on accessibility, clear hierarchy, and details that can't be missed.
       </p>
+    </div>
+  );
+}
+
+function Segmented<T extends string>({
+  label,
+  options,
+  value,
+  onChange,
+  disabled,
+}: {
+  label: string;
+  options: { id: T; label: string }[];
+  value: T;
+  onChange: (v: T) => void;
+  disabled?: boolean;
+}) {
+  return (
+    <div role="group" aria-label={label} className="inline-flex overflow-hidden rounded-md border border-line">
+      {options.map((o) => (
+        <button
+          key={o.id}
+          type="button"
+          aria-pressed={value === o.id}
+          disabled={disabled}
+          onClick={() => onChange(o.id)}
+          className={`cursor-pointer px-2.5 py-1 transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+            value === o.id ? "bg-fg text-bg" : "text-muted hover:text-fg"
+          }`}
+        >
+          {o.label}
+        </button>
+      ))}
     </div>
   );
 }
