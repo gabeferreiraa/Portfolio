@@ -137,6 +137,18 @@ a:hover {
   mask-composite: intersect;
 }
 
+/* Playground jellyfish: deep water behind the glyphs in dark mode only; light
+   mode keeps the page background so the dark glyphs read as ink */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .ascii-water {
+    background: radial-gradient(ellipse 90% 70% at 45% 25%, #0e2434, #08141e 60%, #050b11);
+  }
+}
+
+:root[data-theme="dark"] .ascii-water {
+  background: radial-gradient(ellipse 90% 70% at 45% 25%, #0e2434, #08141e 60%, #050b11);
+}
+
 /* Links that read as titles or cards (case studies): no underline. The arrow
    beside them moves on hover, so they don't rely on color alone. */
 .link-plain {

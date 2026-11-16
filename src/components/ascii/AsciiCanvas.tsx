@@ -1,7 +1,7 @@
 import { useEffect, useRef, type CSSProperties } from "react";
 import { GridRenderer, type ColorMode, type EffectDef, type EffectOptions } from "./engine";
 
-export type FrameStats = { fps: number; ms: number };
+export type FrameStats = { fps: number; ms: number; hud: Record<string, string> };
 
 type Props = {
   effect: EffectDef;
@@ -54,6 +54,7 @@ export function AsciiCanvas(props: Props) {
     let cost = 0;
     let statStart = 0;
     let options = live.current.options;
+    let hud: Record<string, string> = {};
 
     const inside = (x: number, y: number) => x >= rect.left && x < rect.right && y >= rect.top && y < rect.bottom;
     const toCell = (p: { x: number; y: number }) => ({
@@ -89,6 +90,7 @@ export function AsciiCanvas(props: Props) {
           clicks: clicks.splice(0).map(toCell),
           dark,
           options: live.current.options ?? {},
+          hud: (hud = {}),
         });
         dirty = false;
       }
@@ -106,7 +108,7 @@ export function AsciiCanvas(props: Props) {
       frames++;
       if (!statStart) statStart = now;
       if (now - statStart >= 500) {
-        live.current.onStats?.({ fps: (frames * 1000) / (now - statStart), ms: cost / frames });
+        live.current.onStats?.({ fps: (frames * 1000) / (now - statStart), ms: cost / frames, hud });
         frames = 0;
         cost = 0;
         statStart = now;
@@ -194,7 +196,7 @@ export function AsciiCanvas(props: Props) {
     <canvas
       ref={ref}
       aria-hidden="true"
-      className={`pointer-events-none block size-full ${props.className ?? ""}`}
+      className={`pointer-events-none block size-full ${effect.backdrop ?? ""} ${props.className ?? ""}`}
       style={props.style}
     />
   );

@@ -27,10 +27,12 @@ function Playground() {
   const [stars, setStars] = useState<string[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [mode, setMode] = useState<ColorMode>("mono");
-  const [cell, setCell] = useState(14);
+  // Small cells read as finer, more "real" detail; 10px still holds 60fps
+  const [cell, setCell] = useState(10);
   const [speed, setSpeed] = useState(1);
   const [paused, setPaused] = useState(false);
   const [context, setContext] = useState(false);
+  const [hud, setHud] = useState(false);
   const [image, setImage] = useState<ImageBitmap | null>(null);
   const [stats, setStats] = useState<FrameStats | null>(null);
 
@@ -144,7 +146,7 @@ function Playground() {
               </button>
             ))}
           </div>
-          <Range label="Cell" value={cell} min={8} max={28} step={1} format={(v) => `${v}px`} onChange={setCell} disabled={!isCanvas} />
+          <Range label="Cell" value={cell} min={6} max={28} step={1} format={(v) => `${v}px`} onChange={setCell} disabled={!isCanvas} />
           <Range label="Speed" value={speed} min={0.25} max={3} step={0.25} format={(v) => `${v}×`} onChange={setSpeed} disabled={!isCanvas} />
           <button
             type="button"
@@ -164,6 +166,18 @@ function Playground() {
             />
             In context
           </label>
+          {active.def?.hud && (
+            <label className="inline-flex cursor-pointer items-center gap-2">
+              <input
+                type="checkbox"
+                role="switch"
+                checked={hud}
+                onChange={(e) => setHud(e.target.checked)}
+                className="size-4 accent-[var(--fg)]"
+              />
+              HUD
+            </label>
+          )}
         </div>
 
         <div className="relative isolate mt-4 h-[clamp(320px,62svh,600px)] overflow-hidden rounded-lg border border-line">
@@ -181,6 +195,19 @@ function Playground() {
                 />
               </div>
               {context && <HeroMock />}
+              {hud && active.def.hud && stats && (
+                <dl
+                  aria-hidden="true"
+                  className="absolute top-2 left-2 grid grid-cols-[auto_auto] gap-x-3 rounded bg-bg/80 px-2 py-1 font-mono text-[0.6875rem] leading-4 text-muted tabular-nums"
+                >
+                  {Object.entries(stats.hud).map(([k, v]) => (
+                    <div key={k} className="contents">
+                      <dt>{k}</dt>
+                      <dd className="text-right text-fg">{v}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
               <p
                 aria-hidden="true"
                 className="absolute right-2 bottom-2 rounded bg-bg/80 px-1.5 font-mono text-xs leading-5 text-muted tabular-nums"

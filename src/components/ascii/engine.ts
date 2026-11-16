@@ -36,6 +36,8 @@ export type Frame = {
   clicks: { x: number; y: number }[];
   dark: boolean;
   options: EffectOptions;
+  /** Effects with a HUD write their readout here (label → value) */
+  hud: Record<string, string>;
 };
 
 export type Runner = (f: Frame) => void;
@@ -47,6 +49,10 @@ export type EffectDef = {
   caption: string;
   /** Time to render for a static frame (paused at load, or reduced motion) */
   still?: number;
+  /** Has a HUD readout (see Frame.hud) */
+  hud?: boolean;
+  /** CSS class for the canvas background, e.g. a dark-water gradient */
+  backdrop?: string;
   create: () => Runner;
 };
 
@@ -91,8 +97,8 @@ export function plot(f: Frame, col: number, row: number, v: number, h: number) {
 // ---------- renderer ----------
 
 const FIXED: Record<"amber" | "green", { dark: string; light: string }> = {
-  amber: { dark: "#ffb000", light: "#9a5800" },
-  green: { dark: "#3dff7a", light: "#0b7a32" },
+  amber: { dark: "#ffb000", light: "#874600" },
+  green: { dark: "#3dff7a", light: "#056126" },
 };
 
 export class GridRenderer {
@@ -181,13 +187,15 @@ export class GridRenderer {
     for (let r = 0; r < hues; r++) {
       c.fillStyle =
         mode === "native"
-          ? `hsl(${r * (360 / HUES)} 85% ${dark ? 64 : 40}%)`
+          ? `hsl(${r * (360 / HUES)} ${dark ? 85 : 95}% ${dark ? 64 : 34}%)`
           : mode === "mono"
             ? fg
             : FIXED[mode][dark ? "dark" : "light"];
       for (let l = 1; l < LEVELS; l++) {
-        // Sparse glyphs are also fainter, which reads as depth
-        c.globalAlpha = 0.32 + 0.68 * (l / (LEVELS - 1));
+        // Sparse glyphs are also fainter, which reads as depth. Thin dark strokes on a
+        // light page wash out much sooner than light ones on dark, so light keeps a higher floor.
+        const k = l / (LEVELS - 1);
+        c.globalAlpha = dark ? 0.32 + 0.68 * k : 0.62 + 0.38 * k;
         c.fillText(RAMP[l], (l - 1) * cw + cw / 2, r * ch + ch / 2 + ch * 0.04);
       }
     }
