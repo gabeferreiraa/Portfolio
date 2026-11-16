@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { ContactForm } from "../components/ContactForm";
 import { DayCountdown } from "../components/DayCountdown";
 import { External } from "../components/External";
@@ -59,6 +59,9 @@ function Home() {
                 </li>
               ))}
             </ul>
+            <p className="mt-6">
+              <Link to="/case-study">Read the case studies</Link>
+            </p>
           </Section>
 
           <Section id="contact" title="Contact">

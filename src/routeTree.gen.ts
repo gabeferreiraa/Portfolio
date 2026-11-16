@@ -14,6 +14,8 @@ import { Route as GabrielFerreiraDotvcfRouteImport } from './routes/gabriel-ferr
 import { Route as MeetMeRouteImport } from './routes/meet-me'
 import { Route as ResumeRouteImport } from './routes/resume'
 import { Route as TapRouteImport } from './routes/tap'
+import { Route as CaseStudyIndexRouteImport } from './routes/case-study/index'
+import { Route as CaseStudySlugRouteImport } from './routes/case-study/$slug'
 import { Route as PdfResume2026DotpdfRouteImport } from './routes/pdf/Resume-2026[.]pdf'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,6 +43,16 @@ const TapRoute = TapRouteImport.update({
   path: '/tap',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CaseStudyIndexRoute = CaseStudyIndexRouteImport.update({
+  id: '/case-study/',
+  path: '/case-study/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CaseStudySlugRoute = CaseStudySlugRouteImport.update({
+  id: '/case-study/$slug',
+  path: '/case-study/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PdfResume2026DotpdfRoute = PdfResume2026DotpdfRouteImport.update({
   id: '/pdf/Resume-2026.pdf',
   path: '/pdf/Resume-2026.pdf',
@@ -53,7 +65,9 @@ export interface FileRoutesByFullPath {
   '/meet-me': typeof MeetMeRoute
   '/resume': typeof ResumeRoute
   '/tap': typeof TapRoute
+  '/case-study/$slug': typeof CaseStudySlugRoute
   '/pdf/Resume-2026.pdf': typeof PdfResume2026DotpdfRoute
+  '/case-study/': typeof CaseStudyIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -61,7 +75,9 @@ export interface FileRoutesByTo {
   '/meet-me': typeof MeetMeRoute
   '/resume': typeof ResumeRoute
   '/tap': typeof TapRoute
+  '/case-study/$slug': typeof CaseStudySlugRoute
   '/pdf/Resume-2026.pdf': typeof PdfResume2026DotpdfRoute
+  '/case-study': typeof CaseStudyIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -70,7 +86,9 @@ export interface FileRoutesById {
   '/meet-me': typeof MeetMeRoute
   '/resume': typeof ResumeRoute
   '/tap': typeof TapRoute
+  '/case-study/$slug': typeof CaseStudySlugRoute
   '/pdf/Resume-2026.pdf': typeof PdfResume2026DotpdfRoute
+  '/case-study/': typeof CaseStudyIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -80,7 +98,9 @@ export interface FileRouteTypes {
     | '/meet-me'
     | '/resume'
     | '/tap'
+    | '/case-study/$slug'
     | '/pdf/Resume-2026.pdf'
+    | '/case-study/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -88,7 +108,9 @@ export interface FileRouteTypes {
     | '/meet-me'
     | '/resume'
     | '/tap'
+    | '/case-study/$slug'
     | '/pdf/Resume-2026.pdf'
+    | '/case-study'
   id:
     | '__root__'
     | '/'
@@ -96,7 +118,9 @@ export interface FileRouteTypes {
     | '/meet-me'
     | '/resume'
     | '/tap'
+    | '/case-study/$slug'
     | '/pdf/Resume-2026.pdf'
+    | '/case-study/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -105,7 +129,9 @@ export interface RootRouteChildren {
   MeetMeRoute: typeof MeetMeRoute
   ResumeRoute: typeof ResumeRoute
   TapRoute: typeof TapRoute
+  CaseStudySlugRoute: typeof CaseStudySlugRoute
   PdfResume2026DotpdfRoute: typeof PdfResume2026DotpdfRoute
+  CaseStudyIndexRoute: typeof CaseStudyIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -145,6 +171,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TapRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/case-study/': {
+      id: '/case-study/'
+      path: '/case-study'
+      fullPath: '/case-study/'
+      preLoaderRoute: typeof CaseStudyIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/case-study/$slug': {
+      id: '/case-study/$slug'
+      path: '/case-study/$slug'
+      fullPath: '/case-study/$slug'
+      preLoaderRoute: typeof CaseStudySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pdf/Resume-2026.pdf': {
       id: '/pdf/Resume-2026.pdf'
       path: '/pdf/Resume-2026.pdf'
@@ -161,7 +201,9 @@ const rootRouteChildren: RootRouteChildren = {
   MeetMeRoute: MeetMeRoute,
   ResumeRoute: ResumeRoute,
   TapRoute: TapRoute,
+  CaseStudySlugRoute: CaseStudySlugRoute,
   PdfResume2026DotpdfRoute: PdfResume2026DotpdfRoute,
+  CaseStudyIndexRoute: CaseStudyIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

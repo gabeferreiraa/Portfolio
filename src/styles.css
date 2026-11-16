@@ -129,6 +129,12 @@ a:hover {
   color: var(--bg);
 }
 
+/* Links that read as titles or cards (case studies): no underline. The arrow
+   beside them moves on hover, so they don't rely on color alone. */
+.link-plain {
+  text-decoration: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
